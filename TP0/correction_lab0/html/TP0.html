@@ -1,0 +1,424 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP0</title><meta name="generator" content="MATLAB 9.2"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-08-28"><meta name="DC.source" content="TP0.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h2>Contents</h2><div><ul><li><a href="#1">Nettoyage du Workspace</a></li><li><a href="#2">Exercice I: Variables, Scripts, et Courbes</a></li><li><a href="#4">Exercice II: G&eacute;n&eacute;rer et tracer des signaux</a></li><li><a href="#7">Exercice III: Images, Fonctions et Histogrammes</a></li><li><a href="#13">Exercice IV: Images binaires, calcul matriciel, convolution et jeu de la vie</a></li></ul></div><h2 id="1">Nettoyage du Workspace</h2><pre class="codeinput">clear <span class="string">all</span>;
+close <span class="string">all</span>;
+clc;
+</pre><h2 id="2">Exercice I: Variables, Scripts, et Courbes</h2><p>Initialisation des variables</p><pre class="codeinput">load <span class="string">lab0_data.mat</span>;
+
+mozzarella = mozzarella';
+mozzarella(2) = 9.7;
+annee = 2000:2009;
+</pre><p>Tracer du graphique</p><pre class="codeinput">figure(<span class="string">'pos'</span>, [10,10,900,500])
+hold <span class="string">on</span>;
+
+yyaxis <span class="string">left</span>;
+plot(annee, mozzarella);
+xlabel(<span class="string">'Ann&eacute;e'</span>);
+ylabel(<span class="string">'Consommation de Mozzarella par personne (pounds)'</span>);
+ylim([9, 11.1]);
+
+yyaxis <span class="string">right</span>;
+scatter(annee, doctorats);
+xlabel(<span class="string">'Ann&eacute;e'</span>);
+ylabel(<span class="string">'Doctorants en ing&eacute;nieurie civile'</span>);
+ylim([400, 800]);
+
+legend(<span class="string">'mozzarella'</span>, <span class="string">'doctorats'</span>);
+grid <span class="string">on</span>;
+
+title({<span class="string">'&Eacute;tude comparative de l''effet de la consommation de Mozzarella'</span>;
+       <span class="string">'sur les diplom&eacute;s d''ing&eacute;nieurie civile aux USA.'</span>});
+
+
+<span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %</span>
+</pre><img vspace="5" hspace="5" src="TP0_01.png" alt=""> <h2 id="4">Exercice II: G&eacute;n&eacute;rer et tracer des signaux</h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+</pre><p>D&eacute;claration des signaux</p><pre class="codeinput">s0 = @(x) sin(x);
+s1 = @(x) sin(3*x) / 3;
+s2 = @(x) sin(5*x) / 5;
+
+<span class="comment">% D&eacute;claration de x</span>
+x = linspace(0, 4*pi, 500);
+
+<span class="comment">% Tracer de la superposition</span>
+figure(<span class="string">'Name'</span>, <span class="string">'Superposition de sinuso&iuml;des'</span>);
+
+hold <span class="string">on</span>;
+plot(x, s0(x), <span class="string">'--'</span>);
+plot(x, s1(x), <span class="string">'--'</span>);
+plot(x, s2(x), <span class="string">'--'</span>);
+plot(x, s0(x) + s1(x) + s2(x), <span class="string">'LineWidth'</span>, 2);
+
+title(<span class="string">'Superposition de sinuso&iuml;dales'</span>);
+legend(<span class="string">'s_0'</span>, <span class="string">'s_1'</span>, <span class="string">'s_2'</span>, <span class="string">'somme'</span>);
+</pre><img vspace="5" hspace="5" src="TP0_02.png" alt=""> <p>Somme jusqu'&agrave; la 500eme harmonique</p><pre class="codeinput">max_harmonique = 500;
+
+s = zeros(1, length(x));
+<span class="keyword">for</span> i=0:max_harmonique
+   k = 2*i+1;
+   h = sin(k*x) / k;
+   s = s + h;
+<span class="keyword">end</span>
+
+<span class="comment">% Tracer du signal approxim&eacute;</span>
+figure(<span class="string">'Name'</span>, <span class="string">'Approximation d''un signal carr&eacute; par s&eacute;rie de Fourier'</span>);
+plot(x, s);
+title(<span class="string">'Approximation d''un signal carr&eacute; par s&eacute;rie de Fourier'</span>);
+xlabel(<span class="string">'x'</span>);
+ylabel(<span class="string">'s'</span>);
+
+
+<span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %</span>
+</pre><img vspace="5" hspace="5" src="TP0_03.png" alt=""> <h2 id="7">Exercice III: Images, Fonctions et Histogrammes</h2><pre class="codeinput">clear <span class="string">all</span>; close <span class="string">all</span>; clc;
+</pre><p>Lecture et affichage de l'image</p><pre class="codeinput">image = imread(<span class="string">'chat.png'</span>);
+imshow(image);
+
+<span class="comment">% Affichage des valeurs min et max (peut &ecirc;tre fait simplement en console)</span>
+valeurMin = min(image(:));
+valeurMax = max(image(:));
+
+disp(<span class="string">'-- Image de chat --'</span>);
+disp([<span class="string">'min: '</span>, num2str(valeurMin)]);
+disp([<span class="string">'max: '</span>, num2str(valeurMax)]);
+
+<span class="comment">% Affichage des dimensions de l'image (peut &ecirc;tre fait simplement en console)</span>
+dimensions = size(image);
+disp([<span class="string">'dimensions: '</span>, num2str(dimensions)]);
+</pre><pre class="codeoutput">-- Image de chat --
+min: 0
+max: 255
+dimensions: 417  500    3
+</pre><img vspace="5" hspace="5" src="TP0_04.png" alt=""> <p>Affichage du canal bleu</p><pre class="codeinput">imshow(image(:,:,3));
+</pre><img vspace="5" hspace="5" src="TP0_05.png" alt=""> <p>Affichage de tous les canaux en couleurs</p><pre class="codeinput">figure(<span class="string">'pos'</span>, [10,10,900,300]);
+subplot(1,3,1);
+imshow(extraireCanal(image, 1));
+title(<span class="string">'Canal Rouge'</span>);
+
+subplot(1,3,2);
+imshow(extraireCanal(image, 2));
+title(<span class="string">'Canal Vert'</span>);
+
+subplot(1,3,3);
+imshow(extraireCanal(image, 3));
+title(<span class="string">'Canal Bleu'</span>);
+</pre><img vspace="5" hspace="5" src="TP0_06.png" alt=""> <p>Calcul et affichage de l'histogramme bleu (peut &ecirc;tre fait en console)</p><pre class="codeinput">figure();
+histogramme_bleu = imhist(image(:,:,3));
+bar(0:255, histogramme_bleu);
+title(<span class="string">'Histogramme du canal bleu'</span>);
+ylabel(<span class="string">'Fr&eacute;quence'</span>);
+xlabel(<span class="string">'Intensit&eacute; de couleur'</span>);
+</pre><img vspace="5" hspace="5" src="TP0_07.png" alt=""> <p>Affichage de tous les canaux en couleurs et de leurs histogrammes</p><pre class="codeinput">figure(<span class="string">'Name'</span>, <span class="string">'Histogrammes'</span>, <span class="string">'pos'</span>, [10,10,900,600])
+
+subplot(2,3,1)
+tracerHistogramme(image, 1);
+subplot(2,3,4)
+imshow(extraireCanal(image, 1));
+title(<span class="string">'Canal rouge'</span>);
+
+subplot(2,3,2)
+tracerHistogramme(image, 2);
+subplot(2,3,5)
+imshow(extraireCanal(image, 2));
+title(<span class="string">'Canal vert'</span>);
+
+subplot(2,3,3)
+tracerHistogramme(image, 3);
+subplot(2,3,6)
+imshow(extraireCanal(image, 3));
+title(<span class="string">'Canal bleu'</span>);
+
+<span class="comment">% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %</span>
+</pre><img vspace="5" hspace="5" src="TP0_08.png" alt=""> <h2 id="13">Exercice IV: Images binaires, calcul matriciel, convolution et jeu de la vie</h2><pre class="codeinput">close <span class="string">all</span>; clear <span class="string">all</span>; clc;
+load <span class="string">lab0_data.mat</span>;
+
+<span class="comment">% Affichage de la carte</span>
+imagesc(carte);
+colorbar;
+title(<span class="string">'Carte d''initialisation du jeu de la vie'</span>);
+
+<span class="comment">% L'&eacute;quation matricielle en fonction de E et N peut s'&eacute;crire:</span>
+<span class="comment">% (N == 3) + (E .* N == 4)</span>
+</pre><img vspace="5" hspace="5" src="TP0_09.png" alt=""> <p>D&eacute;finition de N en utilisant une convolution</p><pre class="codeinput">N = @(map) conv2(map, ones(3,3), <span class="string">'same'</span>);
+
+<span class="comment">% V&eacute;rification de N sur carteG</span>
+subplot(1,2,1);
+imagesc(carteG);
+title(<span class="string">'carteG'</span>);
+
+subplot(1,2,2);
+imagesc(N(carteG));
+colorbar;
+title(<span class="string">'N(carteG)'</span>);
+</pre><img vspace="5" hspace="5" src="TP0_10.png" alt=""> <p>LE JEU DE LA VIE</p><pre class="codeinput">E = carte;
+
+fenetreJeu = figure(<span class="string">'Name'</span>, <span class="string">'Jeu de la vie'</span>);
+
+<span class="keyword">while</span>( ishghandle(fenetreJeu) )
+    imagesc(E);
+    E = (N(E) == 3) + (E.*N(E) == 4);
+    pause(0.01);
+<span class="keyword">end</span>
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Nettoyage du Workspace
+clear all;
+close all;
+clc;
+
+%% Exercice I: Variables, Scripts, et Courbes
+% Initialisation des variables
+load lab0_data.mat;
+
+mozzarella = mozzarella';
+mozzarella(2) = 9.7;
+annee = 2000:2009;
+
+
+%% 
+% Tracer du graphique
+figure('pos', [10,10,900,500])
+hold on;
+
+yyaxis left;
+plot(annee, mozzarella);
+xlabel('Année');
+ylabel('Consommation de Mozzarella par personne (pounds)');
+ylim([9, 11.1]);
+
+yyaxis right;
+scatter(annee, doctorats);
+xlabel('Année');
+ylabel('Doctorants en ingénieurie civile');
+ylim([400, 800]);
+
+legend('mozzarella', 'doctorats');
+grid on;
+
+title({'Étude comparative de l''effet de la consommation de Mozzarella';
+       'sur les diplomés d''ingénieurie civile aux USA.'});
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+%%  Exercice II: Générer et tracer des signaux
+close all;
+clear all;
+
+%%
+% Déclaration des signaux
+s0 = @(x) sin(x);
+s1 = @(x) sin(3*x) / 3;
+s2 = @(x) sin(5*x) / 5;
+
+% Déclaration de x
+x = linspace(0, 4*pi, 500);
+
+% Tracer de la superposition
+figure('Name', 'Superposition de sinusoïdes');
+
+hold on;
+plot(x, s0(x), 'REPLACE_WITH_DASH_DASH');
+plot(x, s1(x), 'REPLACE_WITH_DASH_DASH');
+plot(x, s2(x), 'REPLACE_WITH_DASH_DASH');
+plot(x, s0(x) + s1(x) + s2(x), 'LineWidth', 2);
+
+title('Superposition de sinusoïdales');
+legend('s_0', 's_1', 's_2', 'somme');
+
+%%
+% Somme jusqu'à la 500eme harmonique
+max_harmonique = 500;
+
+s = zeros(1, length(x));
+for i=0:max_harmonique
+   k = 2*i+1;
+   h = sin(k*x) / k;
+   s = s + h;
+end
+
+% Tracer du signal approximé
+figure('Name', 'Approximation d''un signal carré par série de Fourier');
+plot(x, s);
+title('Approximation d''un signal carré par série de Fourier');
+xlabel('x');
+ylabel('s');
+
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+%%  Exercice III: Images, Fonctions et Histogrammes
+clear all; close all; clc;
+
+%%
+% Lecture et affichage de l'image
+image = imread('chat.png');
+imshow(image);
+
+% Affichage des valeurs min et max (peut être fait simplement en console)
+valeurMin = min(image(:));
+valeurMax = max(image(:));
+
+disp('REPLACE_WITH_DASH_DASH Image de chat REPLACE_WITH_DASH_DASH');
+disp(['min: ', num2str(valeurMin)]);
+disp(['max: ', num2str(valeurMax)]);
+
+% Affichage des dimensions de l'image (peut être fait simplement en console)
+dimensions = size(image);
+disp(['dimensions: ', num2str(dimensions)]);
+
+%%
+% Affichage du canal bleu
+imshow(image(:,:,3));
+
+%%
+% Affichage de tous les canaux en couleurs
+figure('pos', [10,10,900,300]);
+subplot(1,3,1);
+imshow(extraireCanal(image, 1));
+title('Canal Rouge');
+
+subplot(1,3,2);
+imshow(extraireCanal(image, 2));
+title('Canal Vert');
+
+subplot(1,3,3);
+imshow(extraireCanal(image, 3));
+title('Canal Bleu');
+
+%%
+% Calcul et affichage de l'histogramme bleu (peut être fait en console)
+figure();
+histogramme_bleu = imhist(image(:,:,3));
+bar(0:255, histogramme_bleu);
+title('Histogramme du canal bleu');
+ylabel('Fréquence');
+xlabel('Intensité de couleur');
+
+%%
+% Affichage de tous les canaux en couleurs et de leurs histogrammes
+figure('Name', 'Histogrammes', 'pos', [10,10,900,600])
+
+subplot(2,3,1)
+tracerHistogramme(image, 1);
+subplot(2,3,4)
+imshow(extraireCanal(image, 1));
+title('Canal rouge');
+
+subplot(2,3,2)
+tracerHistogramme(image, 2);
+subplot(2,3,5)
+imshow(extraireCanal(image, 2));
+title('Canal vert');
+
+subplot(2,3,3)
+tracerHistogramme(image, 3);
+subplot(2,3,6)
+imshow(extraireCanal(image, 3));
+title('Canal bleu');
+
+% %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% %
+%%  Exercice IV: Images binaires, calcul matriciel, convolution et jeu de la vie
+close all; clear all; clc;
+load lab0_data.mat;
+
+% Affichage de la carte
+imagesc(carte);
+colorbar;
+title('Carte d''initialisation du jeu de la vie');
+
+% L'équation matricielle en fonction de E et N peut s'écrire:
+% (N == 3) + (E .* N == 4)
+
+%%
+% Définition de N en utilisant une convolution
+N = @(map) conv2(map, ones(3,3), 'same');
+
+% Vérification de N sur carteG
+subplot(1,2,1);
+imagesc(carteG);
+title('carteG');
+
+subplot(1,2,2);
+imagesc(N(carteG));
+colorbar;
+title('N(carteG)');
+
+%%
+% LE JEU DE LA VIE
+E = carte;
+
+fenetreJeu = figure('Name', 'Jeu de la vie');
+
+while( ishghandle(fenetreJeu) )
+    imagesc(E);
+    E = (N(E) == 3) + (E.*N(E) == 4);
+    pause(0.01);
+end
+
+
+##### SOURCE END #####
+--></body></html>
