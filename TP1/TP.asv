@@ -13,10 +13,10 @@ t = linspace(-4, 4, 1000);
 plot(t, s(t));
 title('Sinus cardinal en fonction de t');
 xlabel('t');
-ylabel('Sinus cardinal');
-legend('Sinus cardinal');
+ylabel('s(t)');
+legend('s (Sinus cardinal)');
 
-% Le signal s est connu sous le nom de sinus cardinal.
+% Réponse question: Le signal s est connu sous le nom de sinus cardinal.
 
 % 2. 
 close all;
@@ -36,7 +36,7 @@ plot(t, s3(t))
 
 title('Superposition des signaux s1 s2 et s3 en fonction de t');
 xlabel('t');
-ylabel('Signaux s1 s2 et s3');
+ylabel('Signaux s1(t) s2(t) et s3(t)');
 legend('s1', 's2', 's3');
 
 % 3. 
@@ -57,9 +57,9 @@ plot(t, s2(t), '--')
 plot(t, s3(t), '--')
 plot(t, somme(t), 'LineWidth', 2)
 
-title('Superposition des signaux s1 s2 s3 et la somme de ces signaux en fonction de t');
+title('Superposition des signaux s1 s2 s3 ainsi que la somme de ces signaux en fonction de t');
 xlabel('t');
-ylabel('Signaux s1 s2 s3 et s4');
+ylabel('Signaux s1 s2 s3 et leur somme');
 legend('s1', 's2', 's3', 'somme');
 
 % 4.
@@ -67,20 +67,23 @@ close all;
 clear all;
 clc;
 
+% Calcul de la fonction S50(t)
 t = linspace(-2, 2, 500);
-s50 = zeros(1, length(t));
+S50 = zeros(1, length(t));
 for i=0:500
    k = 2*i + 1;
    h = sin(k*t) / k;
-   s50 = (s50 + h);
+   S50 = (S50 + h);
 end
-s50 = 0.5 + (2/pi)* s50;
+S50 = 0.5 + (2/pi)* S50;
 
 figure('Name', 'Approximation de la fonction échelon');
-plot(t, s50);
+plot(t, S50);
 title('Approximation de la fonction échelon');
-xlabel('x');
-ylabel('s');
+xlabel('t');
+ylabel('S50(t)');
+
+% Réponse question: Le signal S50(t) semble approximer la fonction échelon.
 
 %%
 % Exercice 2: Échantillonnage
@@ -97,9 +100,9 @@ Y_3 = @(t) -3*cos(80*pi*t);
 % À l'aide de s(t) = A * sin(w*t + phi) et f = w / 2pi on peut trouver
 % trois fréquences dans le signal Y(t):
 
-% Y_1 -> 82.5 Hz
-% Y_2 -> 3 Hz
-% Y_3 -> 40 Hz
+% Y_1 -> 165pi / 2pi = 82.5 Hz
+% Y_2 -> 6pi / 2pi = 3 Hz
+% Y_3 -> 80pi / 2pi = 40 Hz
 
 % 2. 
 Y = @(t) Y_1(t) + Y_2(t) + Y_3(t);
@@ -123,13 +126,18 @@ subplot_frequence_echantillonnage(6, 330, Y);
 % Le théorème de Nyquist-Shannon stipule que la fréquence d'échantillonnage
 % doit être au moins égale au double de la fréquence maximale du signal
 % analogique.
-% Ici la fréquence max du signal Y est: 
+% Ici la fréquence maximale du signal Y(t) est: 
 % f_max = max(82.5, 3, 40) = 82.5 Hz
-% Donc les fréquences 180 Hz et 330 Hz respectent la condition >= 2* 82.5
+% Réponse question: Donc les fréquences 180 Hz et 330 Hz respectent la condition >= 2*82.5
 % Hz.
-% Un compromis doit être fait entre la performance (rapadité d'analyse du 
-% signal et espace de stockage) et la précision du signal reconstitué. 
 
+% Réponse question: Un compromis doit être fait entre la précision du signal 
+% reconstitué et la quantité de données recueillies.
+% En effet, si la fréquence d'échantillonage est élevée il sera
+% possible d'échantilloner des fréquences élevées. De plus, la latence du 
+% signal sera diminuée. Cependant, si la fréquence d'échantillonage est
+% élevée une plus grande quantité de données devra être recueillie afin 
+% de représenter ce signal.
 
 %% Exercice 3: Analyse spectrale
 close all;
@@ -147,12 +155,14 @@ hold on;
 plot(t, Y_1(t));
 plot(t, Y_2(t));
 plot(t, Y_3(t));
-title('Signaux sinusoïdaux en fonction de t');
+title('Signaux Y_1, Y_2, et Y_3 en fonction de t');
 xlabel('t');
-ylabel('Signaux sinusoïdaux');
+ylabel('Signaux Y_1, Y_2, et Y_3');
 legend('Y_1', 'Y_2', 'Y_3');
 
 % 2. 
+
+% Réponse question: 
 
 % Période déterminée graphiquement:
 % T_1_graph = 0,17671 - 0,076305 = 0,100405
@@ -181,19 +191,60 @@ xlabel('t');
 ylabel('Somme des signaux Y1, Y2 et Y3');
 legend('Z');
 
+% TODO revoir:
+% Réponse question:
 % À l'aide de f = 1 / T où T est : 
 % T = 0,026908 - 0,068273 = 0,200807
 % La fréquence de Z(t) semble être de 1 / 0,200807 = 4,98 Hz
+
+
+% 4. 
 clf;
-
 Y_1_fft = fft(Y_1(t));
-Y_2_fft = fft(Y_2(t));
-Y_3_fft = fft(Y_3(t));
-
-figure();
-bar(0:249, abs(Y_1_fft)/length(Y1_fft));
+bar(0:249, 2*abs(Y_1_fft)/length(Y_1_fft));
+xlim([0 124])
 title('Spectre de fréquence de Y1');
-ylabel('Fréquence');
-xlabel('t');
+ylabel('Intensité');
+xlabel('Fréquence');
 
+clf;
+Y_2_fft = fft(Y_2(t));
+bar(0:249, 2*abs(Y_2_fft)/length(Y_2_fft));
+xlim([0 124])
+title('Spectre de fréquence de Y2');
+ylabel('Intensité');
+xlabel('Fréquence');
 
+clf;
+Y_3_fft = fft(Y_3(t));
+bar(0:249, 2*abs(Y_3_fft)/length(Y_3_fft));
+xlim([0 124])
+title('Spectre de fréquence de Y3');
+ylabel('Intensité');
+xlabel('Fréquence');
+
+% TODO: Revoir
+% Réponse question:
+% Le spectre de fréquence de chacun des signaux présente l'intensité du
+% signal en fonction de la fréquence. Il nous est possible de constater que
+% chaque spectre de fréquence a une fréquence proéminente. Cette fréquence
+% proéminente correspond bel et bien à la fréquence théorique de chacun des
+% signaux. De plus, l'intensité du signal représenté dans chacun des 
+% spectres de fréquence correspond aussi à l'intensité théorique de chacun
+% des signaux.
+
+% 5. 
+clf;
+Z_fft = fft(Z(t));
+bar(0:249, 2*abs(Z_fft)/length(Z_fft));
+xlim([0 124])
+title('Spectre de fréquence de Z');
+ylabel('Intensité');
+xlabel('Fréquence');
+
+% TODO: Revoir
+% Réponse question:
+% Ce spectre de fréquence présente l'intensité du  signal en fonction de la 
+% fréquence. Il nous est possible de constater qu'il y a trois fréquences 
+% proéminentes. Ces fréquences ainsi que leur intensité correspondent aux fréquences des signaux qui
+% compose le signal analysé dans ce spectre de fréquence.
