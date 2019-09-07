@@ -235,8 +235,8 @@ xlabel('Fréquence');
 
 % 5. 
 clf;
-Z_fft = fft(Z(t));
-bar(0:249, 2*abs(Z_fft)/length(Z_fft));
+audio_fft = fft(Z(t));
+bar(0:249, 2*abs(audio_fft)/length(audio_fft));
 xlim([0 124])
 title('Spectre de fréquence de Z');
 ylabel('Intensité');
@@ -248,3 +248,75 @@ xlabel('Fréquence');
 % fréquence. Il nous est possible de constater qu'il y a trois fréquences 
 % proéminentes. Ces fréquences ainsi que leur intensité correspondent aux 
 % signaux Y_1(t), Y_2(t), et Y_3(t) qui composent le signal Z(t) analysé.
+
+
+%%
+% Exercice 4: Filtrage audio
+close all;
+clear all;
+clc;
+
+% 1.
+[Data,Fe] = audioread('audio.wav');
+
+player = audioplayer(Data, Fe);
+% play(player);
+
+% Perturbation #1: Son constant à haute fréquence (son aigu)
+% Perturbation #2: Son constant à base fréquence (son grave)
+
+% 2. 
+% Calcul taille des données audio recueillies
+L = length(Data);
+% Obtenir vecteur représentant la plage de fréquences du fichier audio
+f = Fe*(0:(L/2))/L;
+% Obtenir fft du signal audio
+audio_fft = fft(Data);
+% Seulement prendre les valeur positives + normaliser les données
+all_data = abs(audio_fft/L);
+% Sélectionner seulement la moitié des 
+firt_half = all_data(1:L/2+1);
+% Doubler amplitude des signaux de la première moitié puisque les signaux
+% de la seconde moitié ont été groupé au signaux de la première partie.
+firt_half(2:end-1) = 2*firt_half(2:end-1);
+
+plot(f,firt_half) 
+title('TDF du signal audio.wav')
+xlabel('Fréquence')
+ylabel('Intensité')
+
+% 3.
+% TODO Revoir:
+% Réponse question: En observant une fréquence de 1244.69 Hz il nous est
+% possible d'affirmer que cette fréquence correspond à un ré# ou mib.
+
+% 4. 
+
+% Création du filtre et application de celui-ci sur le fichier audio
+lpf = fir1(128, 1240 / Fe, "low");
+lpf_data = filter(lpf, 1, Data);
+
+% Affichage du nouveau signal sonore (non demandé)
+filtered_data_fft = fft(lpf_data);
+all_data = abs(filtered_data_fft/L);
+firt_half = all_data(1:L/2+1);
+firt_half(2:end-1) = 2*firt_half(2:end-1);
+
+plot(f,firt_half) 
+title('TDF du signal audio.wav avec lowpass filter')
+xlabel('Fréquence')
+ylabel('Intensité')
+
+audiowrite('new_audio_with_low_pass.wav', lpf_data, Fe);
+
+% Réponse question: Nous perdons toutes les fréquences suppérieure à 1240
+% Hz.
+% Nous pourrions créer un filtre pour seulement un petit ensemble de
+% fréquence ce qui limiterait les pertes.
+
+
+%%
+% TODO (remove this comment): 
+% - Amplitude en fct du temps
+% - Intensité en fct de la fréquence
+
