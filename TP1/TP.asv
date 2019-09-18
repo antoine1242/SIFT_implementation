@@ -314,11 +314,9 @@ audiowrite('new_audio_with_low_pass.wav', lpf_data, Fe);
 % fréquence ce qui limiterait les pertes.
 
 % 5. 
-bhi = fir1(128,0.48,'high',cheby2(128, 30, 250/Fe));
+bhi = fir1(128,0.48,'high',chebwin(35,30));
 
 [b, a] = cheby2(128, 30, 250/Fe);
-freqz(b, a);
-
 
 %%
 % TODO (remove this comment): 
