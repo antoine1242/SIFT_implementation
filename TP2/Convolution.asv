@@ -1,0 +1,30 @@
+function [imageConvoluee] = Convolution(image, masque)
+    masque = rot90(masque, 2);
+    sizeMasque = size(masque);
+    
+    moitieMasque = floor(sizeMasque(1)/2);
+    
+    image = padarray(image, [floor(sizeMasque(1)/2), floor(sizeMasque(2)/2)], 0, 'both');
+    
+    [rows, cols] = size(image);
+    imageConvoluee = zeros(rows, cols);
+    
+    for row=1+floor(sizeMasque(1)/2):rows-floor(sizeMasque(1)/2)
+        for col=1+floor(sizeMasque(2)/2):cols-floor(sizeMasque(2)/2)
+            sousMatrice = image(row-moitieMasque:row+moitieMasque, col-moitieMasque:col+moitieMasque);
+            [rowsSM, colsSM] = size(image);
+            somme = 0;
+            
+            for i=1:rowsSM
+                for j=colsSM
+                    somme = somme + (masque(i,j) * sousMatrice(i,j));
+                end
+            end
+            
+            imageConvoluee(row, col) = somme;
+        end
+    end
+    
+    imageConvoluee = 
+    
+end

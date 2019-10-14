@@ -5,11 +5,10 @@ function [imageEgalisee] = Egalisation_Histogramme(image)
     for row = 1:rows
         for col = 1:cols
             index = image(row, col) + 1;
-            disp(index);
             histogramme(index) = histogramme(index) + 1;
         end
     end
-    %bar(histogramme);
+
     histogramme_cumulatif = zeros(1,256);
     somme = 0;
     
@@ -32,17 +31,5 @@ function [imageEgalisee] = Egalisation_Histogramme(image)
     end
     
     imageEgalisee = uint8(imageEgalisee);
-    %{
-    histogramme = zeros(1,256);
-    
-    for row = 1:rows
-        for col = 1:cols
-            index = imageEgalisee(row, col) + 1;
-            disp(index);
-            histogramme(index) = histogramme(index) + 1;
-        end
-    end
-    bar(histogramme);
-    %}
     
 end

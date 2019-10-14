@@ -12,8 +12,13 @@ theArtistEgalisee = Egalisation_Histogramme(theArtist);
 imshow(theArtistEgalisee);
 
 %% 1.2.
+type Convolution.m;
 
 %% 1.3.
+masqueGuassien = 1/90 * [1 2 1 2 1; 2 4 8 4 2; 1 8 18 8 1; 2 4 8 4 2; 1 2 1 2 1];
+
+theArtistConvolue = Convolution(theArtist, masqueGuassien);
+imshow(theArtistConvolue);
 
 %% 1.4.
 
