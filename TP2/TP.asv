@@ -25,17 +25,12 @@ imshow(theArtistConvolue);
 type Rehaussement_Contour.m
 
 theArtist = imread("theArtist.png");
-theArtistRehaussee = Rehaussement_Contour(theArtist, 1/12);
+theArtistRehaussee = Rehaussement_Contour(theArtist, 0.1);
 imshow(theArtistRehaussee);
 
 %% 1.5.
 
-% Les contours de l'image rehaussée sont ressortis. Cela est dû au fait que
-% le filtre Laplacien conserve les contours, soient les transitions de
-% couleur de pixels. En additionnant les contours, ou dans notre cas une
-% fraction de ceux-ci, on fait ressortir les contours de l'image originale.
-
-% Un filtre médian adaptatif pourrait être utilisé pour enlever le bruit.
+% Un filtre médian 
 
 %% Exercice 2: Compteur de monnaie
 close all;
