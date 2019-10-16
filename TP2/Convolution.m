@@ -13,15 +13,8 @@ function [imageConvoluee] = Convolution(image, masque)
     for row=1+floor(sizeMasque(1)/2):rows-floor(sizeMasque(1)/2)
         for col=1+floor(sizeMasque(2)/2):cols-floor(sizeMasque(2)/2)
             sousMatrice = image(row-moitieMasque:row+moitieMasque, col-moitieMasque:col+moitieMasque);
-            [rowsSM, colsSM] = size(sousMatrice);
-            somme = 0;
-            
-            for i=1:rowsSM
-                for j=1:colsSM
-                    somme = somme + (masque(i,j) * sousMatrice(i,j));
-                end
-            end
-            
+            sousMatrice = double(sousMatrice);
+            somme = sum(masque.*sousMatrice, 'all');
             imageConvoluee(row, col) = round(somme/sommeMasque);
         end
     end

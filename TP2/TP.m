@@ -1,3 +1,4 @@
+
 %% Exercice 1: Rehaussement d'images
 close all;
 clear all;
