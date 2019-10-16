@@ -43,12 +43,31 @@ clear all;
 clc;
 
 %% 2.1.
+pieces = imread("pieces.jpg");
+pieces = rgb2gray(pieces);
+
+imshow(pieces);
 
 %% 2.2.
+type Binariser.m
+
+piecesBinarisee = Binariser(pieces, 250);
+piecesBinarisee(piecesBinarisee==0) = 1 ;
+piecesBinarisee(piecesBinarisee==255) = 0 ;
+piecesBinarisee(piecesBinarisee==1) = 255 ;
+
+imshow(piecesBinarisee);
 
 %% 2.3.
 
+elementStructurant = strel('disk', 10, 4);
+piecesFermee = imclose(piecesBinarisee, elementStructurant);
+
+imshow(piecesFermee);
+
 %% 2.4.
+type Compter_Monnaie.m
+total = Compter_Monnaie(piecesFermee);
 
 %% Exercice 3: Transformée de Fourier 2D
 close all;
