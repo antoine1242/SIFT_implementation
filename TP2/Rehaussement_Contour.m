@@ -4,7 +4,7 @@ function [imageRehaussee] = Rehaussement_Contour(image, k)
     
     masqueLaplacien = [-1 -1 -1; -1 8 -1; -1 -1 -1];
     laplacien = Convolution(Ig, masqueLaplacien);
-    imshow(laplacien);
+    %imshow(laplacien);
     
     imageRehaussee = Ig + k * laplacien;
     
