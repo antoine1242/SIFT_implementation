@@ -80,61 +80,53 @@ clc;
 
 %% 3.1.
 verticales = imread("Barres_Verticales.png");
-horizontales = imread("Barres_Horizontales.png");
-obliques = imread("Barres_Obliques.png");
 imshow(verticales);
+
+%%
+horizontales = imread("Barres_Horizontales.png");
 imshow(horizontales);
+
+%%
+obliques = imread("Barres_Obliques.png");
 imshow(obliques);
 
 %% 3.2.
 
 % TODO revoir normaliser les valeurs?
-% maillot_norm = maillot./max(max(max(maillot)));
-
 
 fft2_verticales = fft2(verticales);
 module_verticales = abs(fft2_verticales);
-% size_verticales = size(verticales);
-% module_verticales = module_verticales /
-% size_verticales(1)*size_verticales(2);
+module_verticales = module_verticales / length(module_verticales);
 shift_verticales = fftshift(module_verticales);
-imshow(1 + log2(shift_verticales), []);
+imshow(1 + log10(shift_verticales), []);
 
-
+%%
 fft2_horizontales = fft2(horizontales);
-module_horizontales = abs(fft2_verticales);
-% size_horizontales = size(horizontales);
-% module_horizontales = module_horizontales /
-% size_horizontales(1)*size_horizontales(2);
+module_horizontales = abs(fft2_horizontales);
+module_horizontales = module_horizontales / length(module_horizontales);
 shift_horizontales = fftshift(module_horizontales);
-imshow(1 + log2(shift_horizontales), []);
+imshow(1 + log10(shift_horizontales), []);
 
-
+%%
 fft2_obliques = fft2(obliques);
 module_obliques = abs(fft2_obliques);
-% size_obliques = size(obliques);
-% module_obliques = module_obliques / size_obliques(1)*size_obliques(2);
+module_obliques = module_obliques / length(module_obliques)
 shift_obliques = fftshift(module_obliques);
-imshow(1 + log2(shift_obliques), []);
+imshow(1 + log10(shift_obliques), []);
 
 
 %% 3.3.
 
-% TODO 
-% 70 degré dans quel sens?
-% 
 verticales = imread("Barres_Verticales.png");
 verticales_rotation70 = imrotate(verticales, 70, 'bilinear', 'crop');
 imshow(verticales_rotation70)
 
-
+%%
 fft2_verticales = fft2(verticales_rotation70);
 module_verticales = abs(fft2_verticales);
-% size_verticales = size(verticales);
-% module_verticales = module_verticales /
-% size_verticales(1)*size_verticales(2);
+module_verticales = module_verticales / length(module_verticales);
 shift_verticales = fftshift(module_verticales);
-imshow(1 + log2(shift_verticales), []);
+imshow(1 + log10(shift_verticales), []);
 
 
 %% 3.4.
@@ -142,7 +134,7 @@ imshow(1 + log2(shift_verticales), []);
 % TODO revoir: pas certain des fft2 par rapport à la normalisation
 % http://www.cs.toronto.edu/~jepson/csc320/notes/linearFilters2.pdf
 
-
+% Symétrie et translation
 
 %% Exercice 4: Filtrage spectral
 close all;
@@ -151,101 +143,105 @@ clc;
 
 %% 4.1.
 maillot = imread("maillot.png");
-imshow(maillot);
+fft2_maillot = fft2(maillot);
+norm_maillot = fft2_maillot / length(fft2_maillot);
+module_maillot = abs(norm_maillot);
+shift_maillot = fftshift(module_maillot);
+imshow(log10(1 + shift_maillot), []);
+
+%%
+maillot = imread("maillot_2.png");
+maillot = rgb2gray(maillot);
 
 fft2_maillot = fft2(maillot);
-module_maillot = abs(fft2_maillot);
-% size_maillot = size(maillot);
-% module_maillot = module_maillot / % size_maillot(1)*size_maillot(2);
+norm_maillot = fft2_maillot / length(fft2_maillot);
+module_maillot = abs(norm_maillot);
 shift_maillot = fftshift(module_maillot);
-imshow(1 + log2(shift_maillot), []);
+imshow(log10(1 + shift_maillot), []);
 
 %% 4.2.
 
-% Manche côté gauche: diagonale pente positive??? pas suuposé être
-% l'inverse?
-% Manche côté droit: diagonale pente négative??? pas supposé être
-% l'inverse?
-% Collet: ?
-% Pochette: Ligne horizontale??? pas supposé être verticale?
-% Corps (ligne verticales): Ligne verticale??? pas supposé être
-% horizontale?
-
-%% TODO Question : Ne devrait pas redonner la même image?
-maillot = imread("maillot.png");
-H_times_F = fftshift(fft2(maillot));
-maillot_img_with_filter = ifft2(ifftshift(H_times_F));
-imshow(maillot_img_with_filter, []);
+% Manche côté gauche (avec moins de lignes): diagonale pente négative principale
+% Manche côté droit (avec beaucoup de lignes): diagonale pente positive principale
+% Col: ?
+% Pochette: Ligne centrale verticale
+% Torse: ligne centrale horizontale
 
 
 %% 4.3.
-% Devons-nous utiliser TF^-1 pour afficher image ou imfilter(fft2_maillot,
-% double(maillot))?
-
 maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+
 H = fspecial('gaussian', size(maillot), 60);
-F = fftshift(fft2(double(maillot)));
+H = H./max(H(:));
+F = fftshift(fft2(maillot));
 low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
-imshow(low_pass_filtered_maillot, []);
+imshow(low_pass_filtered_maillot);
 
-
-%% V2 4.4 
+%% 4.4 
 maillot = imread("maillot.png");
-H = fspecial('gaussian', size(maillot), 300);
-F = fftshift(fft2(double(maillot)));
-low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+maillot = double(maillot)/255;
 
-high_pass_filtered_maillot = double(maillot) - low_pass_filtered_maillot;
-imshow(high_pass_filtered_maillot, []);
-
-%% V1 4.4.
-
-maillot = imread("maillot.png");
-H = fspecial('gaussian', size(maillot), 300);
-F = fftshift(fft2(double(maillot)));
+H = fspecial('gaussian', size(maillot), 60);
+F = fftshift(fft2(maillot));
+H = H./max(H(:));
 low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
 
-high_pass_filtered_maillot = double(maillot) - low_pass_filtered_maillot;
-imshow(high_pass_filtered_maillot, []);
-
-maillot = imread("maillot.png");
+high_pass_filtered_maillot = maillot - low_pass_filtered_maillot;
+imshow(high_pass_filtered_maillot);
  
-%% V2 4.4
-
-maillot = imread("maillot.png");
-gaussian_filter = fspecial('gaussian', size(H), 3)
-I_filtered = maillot - imfilter( maillot, gaussian_filter); 
-imshow(I_filtered, [])
-
-%% V3 4.4 
-
-
-% Transformée de Fourier centré de l'image
-F = fftshift(fft2(maillot))
-% Init filter
-H = fspecial('gaussian', size(F), 3)
-% Apply filter
-% filtered_spectrum = filter2(gaussian_filter, img_spectrum) % same as H_times_F = H .* gaussian_filter;? 
-
-% V1
-%h1 = (1/9).*[1,1,1;1,1,1;1,1,1];
-%filtered_spectrum = filter2(h1,img_spectrum);
-filtered_spectrum = H .* F;
-%filtered_spectrum = uint8(round(filtered_spectrum))
-% Back to time domain
-maillot_img_with_low_filter = ifft2(ifftshift(filtered_spectrum));
-E = maillot_img_with_low_filter;
-maillot_img_with_high_filter = double(maillot) - E;
-imshow(maillot_img_with_high_filter, []);
-
-
 
 %% 4.5.
 
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+
+H = imread("filter4_5.png");
+H = rgb2gray(H);
+H = double(H)/255;
+
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+
+imshow(low_pass_filtered_maillot);
+
 %% 4.6.
+
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+
+H = imread("filter4_6.png");
+H = rgb2gray(H);
+H = double(H)/255;
+
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+
+high_pass_filtered_maillot = maillot - low_pass_filtered_maillot;
+imshow(low_pass_filtered_maillot);
 
 %% 4.7.
 
+% Un filtre idéal est un filte passe-bas. Son masque spatial de convolution 
+% contient des ondulations. Ces ondulations causent des cercles 
+% d'artefacts. Le filtre Butterworth est aussi un filtre
+% passe-bas, mais il diminue les ondulations ce qui permet de diminuer le
+% nombre d'artefact.
+
 %% 4.8.
 
+% La fréquence 0 correspond à la fréquence moyenne du spectre. En enlevant
+% cette valeur on se retrouve donc à la soustraire de toutes les autres
+% fréquences. Cette soustraction correspond à une translation de l'ensemble
+% du spectre de fréquences. Il est donc possible d'affirmer que l'image
+% résultante sera plus sombre que l'image originale.
+
+
 %% 4.9.
+
+% Puisque les composantes du maillot apparaissent en ordre décroissant de
+% fréquence (séquence de ligne blanche noire plus blanc) nous avons donc
+% besoin d'un filtre passe haut qui devient de plus en plus petit (en
+% diminuant la fréquence de coupure).
+% On peut le voir comme un disque noir qui diminue.
+% 
