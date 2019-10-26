@@ -1,0 +1,690 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>TP</title><meta name="generator" content="MATLAB 9.7"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-10-26"><meta name="DC.source" content="TP.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1></h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Exercice 1: Rehaussement d'images</a></li><li><a href="#2">1.1.</a></li><li><a href="#5">1.2.</a></li><li><a href="#6">1.3.</a></li><li><a href="#7">1.4.</a></li><li><a href="#10">1.5.</a></li><li><a href="#11">Exercice 2: Compteur de monnaie</a></li><li><a href="#12">2.1.</a></li><li><a href="#13">2.2.</a></li><li><a href="#16">2.3.</a></li><li><a href="#17">2.4.</a></li><li><a href="#21">Exercice 3: Transform&eacute;e de Fourier 2D</a></li><li><a href="#22">3.1.</a></li><li><a href="#25">3.2.</a></li><li><a href="#28">3.3.</a></li><li><a href="#30">3.4.</a></li><li><a href="#31">Exercice 4: Filtrage spectral</a></li><li><a href="#32">4.1.</a></li><li><a href="#33">4.2.</a></li><li><a href="#37">4.3.</a></li><li><a href="#38">4.4</a></li><li><a href="#39">4.5.</a></li><li><a href="#42">4.6.</a></li><li><a href="#45">4.7.</a></li><li><a href="#46">4.8.</a></li><li><a href="#47">4.9.</a></li></ul></div><h2 id="1">Exercice 1: Rehaussement d'images</h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+</pre><h2 id="2">1.1.</h2><p>Image originale:</p><pre class="codeinput">theArtist = imread(<span class="string">"theArtist.png"</span>);
+imshow(theArtist);
+</pre><img vspace="5" hspace="5" src="TP_01.png" alt=""> <p>Fonction Egalisation_Histogramme.m:</p><pre class="codeinput">type <span class="string">Egalisation_Histogramme.m</span>;
+</pre><pre class="codeoutput">
+function [imageEgalisee] = Egalisation_Histogramme(image)
+    histogramme = zeros(1,256);
+    [rows, cols] = size(image);
+    
+    for row = 1:rows
+        for col = 1:cols
+            index = image(row, col) + 1;
+            histogramme(index) = histogramme(index) + 1;
+        end
+    end
+
+    histogramme_cumulatif = zeros(1,256);
+    somme = 0;
+    
+    for i = 1:256
+       somme = somme + histogramme(i);
+       histogramme_cumulatif(i) = somme;
+    end
+    
+    imageEgalisee = zeros(rows, cols);
+    pixels = rows * cols;
+    
+    for row = 1:rows
+        for col = 1:cols
+            index = image(row, col) + 1;
+            value = histogramme_cumulatif(index);
+            odds = value/pixels;
+            newValue = round(255 * odds);
+            imageEgalisee(row, col) = newValue;
+        end
+    end
+    
+    imageEgalisee = uint8(imageEgalisee);
+    
+end
+</pre><p>Image avec &eacute;galisation:</p><pre class="codeinput">theArtistEgalisee = Egalisation_Histogramme(theArtist);
+imshow(theArtistEgalisee);
+</pre><img vspace="5" hspace="5" src="TP_02.png" alt=""> <h2 id="5">1.2.</h2><p>Fonction Convolution.m:</p><pre class="codeinput">type <span class="string">Convolution.m</span>;
+</pre><pre class="codeoutput">
+function [imageConvoluee] = Convolution(image, masque)
+    masque = rot90(masque, 2);
+    sizeMasque = size(masque);
+    
+    moitieMasque = floor(sizeMasque(1)/2);
+    sommeMasque = sum(masque,'all');
+    
+    image = padarray(image, [floor(sizeMasque(1)/2), floor(sizeMasque(2)/2)], 0, 'both');
+    
+    [rows, cols] = size(image);
+    imageConvoluee = zeros(rows, cols);
+    
+    for row=1+floor(sizeMasque(1)/2):rows-floor(sizeMasque(1)/2)
+        for col=1+floor(sizeMasque(2)/2):cols-floor(sizeMasque(2)/2)
+            sousMatrice = image(row-moitieMasque:row+moitieMasque, col-moitieMasque:col+moitieMasque);
+            sousMatrice = double(sousMatrice);
+            somme = sum(masque.*sousMatrice, 'all');
+            imageConvoluee(row, col) = round(somme/sommeMasque);
+        end
+    end
+    
+    imageConvoluee = imageConvoluee(floor(sizeMasque(1)/2)+1:rows-floor(sizeMasque(1)/2),floor(sizeMasque(1)/2)+1:cols-floor(sizeMasque(1)/2)); 
+    imageConvoluee = uint8(imageConvoluee);
+end
+</pre><h2 id="6">1.3.</h2><pre class="codeinput">masqueGuassien = 1/90 * [1 2 1 2 1; 2 4 8 4 2; 1 8 18 8 1; 2 4 8 4 2; 1 2 1 2 1];
+
+theArtistConvolue = Convolution(theArtistEgalisee, masqueGuassien);
+imshow(theArtistConvolue);
+</pre><img vspace="5" hspace="5" src="TP_03.png" alt=""> <h2 id="7">1.4.</h2><p>Fonction Rehaussement_Contour.m:</p><pre class="codeinput">type <span class="string">Rehaussement_Contour.m</span>
+</pre><pre class="codeoutput">
+function [imageRehaussee] = Rehaussement_Contour(image, k)
+    masqueGaussien = 1/16 * [1 2 1; 2 4 2; 1 2 1];
+    Ig = Convolution(image, masqueGaussien);
+    
+    masqueLaplacien = [-1 -1 -1; -1 8 -1; -1 -1 -1];
+    laplacien = Convolution(Ig, masqueLaplacien);
+    %imshow(laplacien);
+    
+    imageRehaussee = Ig + k * laplacien;
+    
+    % Mettre les valeurs n&eacute;gatives &agrave; 0
+    imageRehaussee(imageRehaussee &lt; 0) = 0;
+    
+    imageRehaussee = uint8(imageRehaussee);
+end
+</pre><pre class="codeinput">theArtistRehaussee = Rehaussement_Contour(theArtistConvolue, 1/15);
+imshow(theArtistRehaussee);
+</pre><img vspace="5" hspace="5" src="TP_04.png" alt=""> <h2 id="10">1.5.</h2><pre class="codeinput"><span class="comment">% TODO: Revoir</span>
+
+<span class="comment">% Les contours de l'image rehauss&eacute;e sont ressortis. Cela est d&ucirc; au fait que</span>
+<span class="comment">% le filtre Laplacien conserve les contours, soient les transitions de</span>
+<span class="comment">% couleur de pixels. En additionnant les contours, ou dans notre cas une</span>
+<span class="comment">% fraction de ceux-ci, on fait ressortir les contours de l'image originale.</span>
+
+<span class="comment">% Un filtre m&eacute;dian adaptatif pourrait &ecirc;tre utilis&eacute; pour enlever le bruit.</span>
+</pre><h2 id="11">Exercice 2: Compteur de monnaie</h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+</pre><h2 id="12">2.1.</h2><pre class="codeinput">pieces = imread(<span class="string">"pieces.jpg"</span>);
+pieces = rgb2gray(pieces);
+
+imshow(pieces);
+</pre><img vspace="5" hspace="5" src="TP_05.png" alt=""> <h2 id="13">2.2.</h2><p>Voici le d&eacute;tail de la fonction Binariser.m</p><pre class="codeinput">type <span class="string">Binariser.m</span>;
+</pre><pre class="codeoutput">
+function [imageBinarisee] = Binariser(image, seuil)
+    [rows, cols] = size(image);
+    imageBinarisee = zeros(rows, cols);
+    
+    for row = 1:rows
+        for col = 1:cols
+            if image(row, col) &gt;= seuil
+               imageBinarisee(row, col) = 255; 
+            else
+                imageBinarisee(row, col) = 0;
+            end
+        end
+    end
+end
+</pre><pre class="codeinput">piecesBinarisee = Binariser(pieces, 250);
+piecesBinarisee(piecesBinarisee==0) = 1 ;
+piecesBinarisee(piecesBinarisee==255) = 0 ;
+piecesBinarisee(piecesBinarisee==1) = 255 ;
+
+imshow(piecesBinarisee);
+</pre><img vspace="5" hspace="5" src="TP_06.png" alt=""> <h2 id="16">2.3.</h2><pre class="codeinput">elementStructurant = strel(<span class="string">'disk'</span>, 10, 4);
+piecesFermee = imclose(piecesBinarisee, elementStructurant);
+
+imshow(piecesFermee);
+</pre><img vspace="5" hspace="5" src="TP_07.png" alt=""> <h2 id="17">2.4.</h2><p>Voici le d&eacute;tail de la fonction Compter_Monnaie.m</p><pre class="codeinput">type <span class="string">Compter_Monnaie.m</span>;
+</pre><pre class="codeoutput">
+function [total] = Compter_Monnaie(image)
+    nbStructures = 0;
+
+    esBouchon= strel('disk', 200, 4);
+    imageBouchon = imerode(image, esBouchon);
+    bouchons = bwconncomp(imageBouchon);
+    nbBouchons = bouchons.NumObjects - nbStructures;
+    nbStructures = nbStructures + nbBouchons;
+    
+    es2Dollar = strel('disk', 140, 4);
+    image2Dollars = imerode(image, es2Dollar);
+    dollars = bwconncomp(image2Dollars);
+    nb2Dollars = dollars.NumObjects - nbStructures;
+    nbStructures = nbStructures + nb2Dollars;
+    
+    es25Cents = strel('disk', 120, 4);
+    image25Cents = imerode(image, es25Cents);
+    vingCincCents = bwconncomp(image25Cents);
+    nb25Cents = vingCincCents.NumObjects - nbStructures;
+    nbStructures = nbStructures + nb25Cents;
+    
+    es5Cents = strel('disk', 110, 4);
+    image5Cents = imerode(image, es5Cents);
+    cincCents = bwconncomp(image5Cents);
+    nb5Cents = cincCents.NumObjects - nbStructures;
+    nbStructures = nbStructures + nb5Cents;
+    
+    es10Cents = strel('disk', 90, 4);
+    image10Cents = imerode(image, es10Cents);
+    dixCents = bwconncomp(image10Cents);
+    nb10Cents = dixCents.NumObjects - nbStructures;
+    nbStructures = nbStructures + nb10Cents;
+    
+    total = 2 * nb2Dollars + 0.25 * nb25Cents + 0.10 * nb10Cents + 0.05 * nb5Cents;
+end
+</pre><pre class="codeinput">total = Compter_Monnaie(piecesFermee);
+</pre><p>Voici le total calcul&eacute; par la fonction Compter_Monnaie.m en $:</p><pre class="codeinput">disp(total);
+</pre><pre class="codeoutput">    5.6500
+
+</pre><h2 id="21">Exercice 3: Transform&eacute;e de Fourier 2D</h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+</pre><h2 id="22">3.1.</h2><pre class="codeinput">verticales = imread(<span class="string">"Barres_Verticales.png"</span>);
+imshow(verticales);
+</pre><img vspace="5" hspace="5" src="TP_08.png" alt=""> <pre class="codeinput">horizontales = imread(<span class="string">"Barres_Horizontales.png"</span>);
+imshow(horizontales);
+</pre><img vspace="5" hspace="5" src="TP_09.png" alt=""> <pre class="codeinput">obliques = imread(<span class="string">"Barres_Obliques.png"</span>);
+imshow(obliques);
+</pre><img vspace="5" hspace="5" src="TP_10.png" alt=""> <h2 id="25">3.2.</h2><p>Voici le spectre de l'image: Barres_Verticales</p><pre class="codeinput">fft2_verticales = fft2(verticales);
+module_verticales = abs(fft2_verticales);
+module_verticales = module_verticales / length(module_verticales);
+shift_verticales = fftshift(module_verticales);
+imshow(log10(1 + shift_verticales), []);
+</pre><img vspace="5" hspace="5" src="TP_11.png" alt=""> <p>Voici le spectre de l'image: Barres_Horizontales</p><pre class="codeinput">fft2_horizontales = fft2(horizontales);
+module_horizontales = abs(fft2_horizontales);
+module_horizontales = module_horizontales / length(module_horizontales);
+shift_horizontales = fftshift(module_horizontales);
+imshow(log10(1 + shift_horizontales), []);
+</pre><img vspace="5" hspace="5" src="TP_12.png" alt=""> <p>Voici le spectre de l'image: Barres_Obliques</p><pre class="codeinput">fft2_obliques = fft2(obliques);
+module_obliques = abs(fft2_obliques);
+module_obliques = module_obliques / length(module_obliques);
+shift_obliques = fftshift(module_obliques);
+imshow(log10(1 + shift_obliques), []);
+</pre><img vspace="5" hspace="5" src="TP_13.png" alt=""> <h2 id="28">3.3.</h2><pre class="codeinput">verticales = imread(<span class="string">"Barres_Verticales.png"</span>);
+verticales_rotation70 = imrotate(verticales, 70, <span class="string">'bilinear'</span>, <span class="string">'crop'</span>);
+imshow(verticales_rotation70)
+</pre><img vspace="5" hspace="5" src="TP_14.png" alt=""> <pre class="codeinput">fft2_verticales = fft2(verticales_rotation70);
+module_verticales = abs(fft2_verticales);
+module_verticales = module_verticales / length(module_verticales);
+shift_verticales = fftshift(module_verticales);
+imshow(log10(1 + shift_verticales), []);
+</pre><img vspace="5" hspace="5" src="TP_15.png" alt=""> <h2 id="30">3.4.</h2><pre class="codeinput"><span class="comment">% TODO revoir: pas certain des fft2 par rapport &agrave; la normalisation</span>
+<span class="comment">% http://www.cs.toronto.edu/~jepson/csc320/notes/linearFilters2.pdf</span>
+<span class="comment">% https://www.eee.hku.hk/~work8501/WWW2008/ho4.pdf</span>
+
+<span class="comment">% Il est possible d'inf&eacute;rer qu'une transform&eacute;e de Fourier 2D respecte les</span>
+<span class="comment">% propri&eacute;t&eacute;es suivantes:</span>
+<span class="comment">% 1. Sym&eacute;trie: ?</span>
+<span class="comment">% 2. Rotaton: une rotation d'une image d'un angle ? implique que sa</span>
+<span class="comment">% 3. Shift/Translation?</span>
+<span class="comment">% transform&eacute;e de Fourier est &eacute;galement tourn&eacute;e d'un m&ecirc;me angle.</span>
+</pre><h2 id="31">Exercice 4: Filtrage spectral</h2><pre class="codeinput">close <span class="string">all</span>;
+clear <span class="string">all</span>;
+clc;
+</pre><h2 id="32">4.1.</h2><pre class="codeinput">maillot = imread(<span class="string">"maillot.png"</span>);
+fft2_maillot = fft2(maillot);
+norm_maillot = fft2_maillot / length(fft2_maillot);
+module_maillot = abs(norm_maillot);
+shift_maillot = fftshift(module_maillot);
+imshow(log10(1 + shift_maillot), []);
+</pre><img vspace="5" hspace="5" src="TP_16.png" alt=""> <h2 id="33">4.2.</h2><pre class="codeinput"><span class="comment">% Voici notre r&eacute;ponse textuelle. Voir le sch&eacute;ma ci-dessous pour plus de</span>
+<span class="comment">% d&eacute;tails.</span>
+
+<span class="comment">% Manche c&ocirc;t&eacute; gauche (avec moins de lignes): diagonale pente n&eacute;gative principale</span>
+<span class="comment">% Manche c&ocirc;t&eacute; droit (avec beaucoup de lignes): diagonale pente positive principale</span>
+<span class="comment">% Col: Voir ci-dessous</span>
+<span class="comment">% Pochette: Ligne centrale verticale</span>
+<span class="comment">% Torse: ligne centrale horizontale</span>
+</pre><pre class="codeinput">spectre_identifie = imread(<span class="string">"spectre_identifie.png"</span>);
+imshow(spectre_identifie);
+</pre><img vspace="5" hspace="5" src="TP_17.png" alt=""> <p>D&eacute;tail pour l'identification du spectre du col:</p><pre class="codeinput"><span class="comment">% Premi&egrave;rement, nous avons isol&eacute; le col:</span>
+col = imread(<span class="string">"col.png"</span>);
+col = rgb2gray(col);
+imshow(col);
+</pre><pre class="codeoutput">Warning: PNG library warning: bKGD: invalid. 
+</pre><img vspace="5" hspace="5" src="TP_18.png" alt=""> <p>D&eacute;tail pour l'identification du spectre du col:</p><pre class="codeinput"><span class="comment">% Deuxi&egrave;mement, nous avons calcul son spectre:</span>
+fft2_col = fft2(col);
+norm_col = fft2_col / length(fft2_col);
+module_col = abs(norm_col);
+shift_col = fftshift(module_col);
+imshow(log10(1 + shift_col), []);
+</pre><img vspace="5" hspace="5" src="TP_19.png" alt=""> <h2 id="37">4.3.</h2><pre class="codeinput">maillot = imread(<span class="string">"maillot.png"</span>);
+maillot = double(maillot)/255;
+H = fspecial(<span class="string">'gaussian'</span>, size(maillot), 60);
+H = H./max(H(:));
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+</pre><img vspace="5" hspace="5" src="TP_20.png" alt=""> <h2 id="38">4.4</h2><pre class="codeinput">maillot = imread(<span class="string">"maillot.png"</span>);
+maillot = double(maillot)/255;
+
+H = fspecial(<span class="string">'gaussian'</span>, size(maillot), 60);
+F = fftshift(fft2(maillot));
+H = H./max(H(:));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+
+high_pass_filtered_maillot = maillot - low_pass_filtered_maillot;
+imshow(high_pass_filtered_maillot);
+</pre><img vspace="5" hspace="5" src="TP_21.png" alt=""> <h2 id="39">4.5.</h2><pre class="codeinput">maillot = imread(<span class="string">"maillot.png"</span>);
+maillot = double(maillot)/255;
+H = imread(<span class="string">"filter4_5_7.png"</span>);
+H = rgb2gray(H);
+H = double(H)/255;
+</pre><p>Voici le filtre id&eacute;al que avons cr&eacute;&eacute; et utilis&eacute; pour conserver uniquement la texture des deux manches.</p><pre class="codeinput">imshow(H);
+</pre><img vspace="5" hspace="5" src="TP_22.png" alt=""> <p>Voici le r&eacute;sultat final:</p><pre class="codeinput">F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+</pre><img vspace="5" hspace="5" src="TP_23.png" alt=""> <h2 id="42">4.6.</h2><pre class="codeinput">maillot = imread(<span class="string">"maillot.png"</span>);
+maillot = double(maillot)/255;
+H = imread(<span class="string">"filter4_6.png"</span>);
+H = rgb2gray(H);
+H = double(H)/255;
+</pre><p>Voici le filtre id&eacute;al que avons cr&eacute;&eacute; et utilis&eacute; pour faire disparaitre la texture du torse.</p><pre class="codeinput">imshow(H);
+</pre><img vspace="5" hspace="5" src="TP_24.png" alt=""> <p>Voici le r&eacute;sultat final:</p><pre class="codeinput">F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+</pre><img vspace="5" hspace="5" src="TP_25.png" alt=""> <h2 id="45">4.7.</h2><pre class="codeinput"><span class="comment">% Un filtre id&eacute;al est un filtre passe-bas. De plus,</span>
+<span class="comment">% le masque spatial de convolution d'un filtre id&eacute;al</span>
+<span class="comment">% contient des ondulations. Lorsqu'on applique un filtre sur une image ces</span>
+<span class="comment">% ondulations causent des cercles d'artefacts sur l'image finale.</span>
+
+<span class="comment">% Le filtre Butterworth est aussi un filtre passe-bas. Par contre,</span>
+<span class="comment">% les ondulations qui peuvent se trouver dans son masque spatial de</span>
+<span class="comment">% convolution son grandement att&eacute;nu&eacute;es puisque la transistion entre le cercle</span>
+<span class="comment">% central blanc et le noir l'entourant est beaucoup plus lisse que dans un</span>
+<span class="comment">% filtre id&eacute;al. Cela permet par le m&ecirc;me fait de significativement diminuer</span>
+<span class="comment">% le nombre d'artefacts dans l'image finale. Par contre, il est important de</span>
+<span class="comment">% noter que lorsque l'ordre du filtre Butterworth augmente celui-ci se</span>
+<span class="comment">% rapproche d'un filtre id&eacute;al et donc il y aura apparition d'art&eacute;facts.</span>
+</pre><h2 id="46">4.8.</h2><pre class="codeinput"><span class="comment">% La fr&eacute;quence 0 correspond &agrave; la fr&eacute;quence moyenne du spectre. En enlevant</span>
+<span class="comment">% cette valeur on se retrouve donc &agrave; la soustraire de toutes les autres</span>
+<span class="comment">% fr&eacute;quences. Cette soustraction correspond &agrave; une translation de l'ensemble</span>
+<span class="comment">% du spectre de fr&eacute;quences vers 0. Il est donc possible d'affirmer que l'image</span>
+<span class="comment">% r&eacute;sultante sera plus "noire" que l'image originale ou &eacute;gale.</span>
+</pre><h2 id="47">4.9.</h2><pre class="codeinput"><span class="comment">% Puisque les composantes du maillot apparaissent en ordre d&eacute;croissant de</span>
+<span class="comment">% fr&eacute;quence (alternance entre lignes blanches et noires rapide) nous avons donc</span>
+<span class="comment">% besoin d'un filtre passe haut qui laisse passer de plus en plus de basses</span>
+<span class="comment">% fr&eacute;quences.</span>
+<span class="comment">% Il est possible de produire ce comportement &agrave; l'aide d'un filtre id&eacute;al</span>
+<span class="comment">% passe haut avec initialement une grande fr&eacute;quence de coupure  (donc un cercle noir</span>
+<span class="comment">% centr&eacute; avec un grand rayon). Ensuite, diminuer la fr&eacute;quence de coupure</span>
+<span class="comment">% petit &agrave; petit jusqu'&agrave; ce que celle-ci soit 0 et donc aucune fr&eacute;quence</span>
+<span class="comment">% ne sera coup&eacute;e ce qui permettra d'obtenir la couleur moyenne de l'image.</span>
+</pre><p class="footer"><br><a href="https://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2019b</a><br></p></div><!--
+##### SOURCE BEGIN #####
+
+%% Exercice 1: Rehaussement d'images
+close all;
+clear all;
+clc;
+
+%% 1.1.
+% Image originale:
+theArtist = imread("theArtist.png");
+imshow(theArtist);
+
+%%
+% Fonction Egalisation_Histogramme.m:
+type Egalisation_Histogramme.m;
+
+%%
+% Image avec égalisation:
+theArtistEgalisee = Egalisation_Histogramme(theArtist);
+imshow(theArtistEgalisee);
+
+%% 1.2.
+% Fonction Convolution.m:
+type Convolution.m;
+
+%% 1.3.
+masqueGuassien = 1/90 * [1 2 1 2 1; 2 4 8 4 2; 1 8 18 8 1; 2 4 8 4 2; 1 2 1 2 1];
+
+theArtistConvolue = Convolution(theArtistEgalisee, masqueGuassien);
+imshow(theArtistConvolue);
+
+%% 1.4.
+%%
+% Fonction Rehaussement_Contour.m:
+type Rehaussement_Contour.m
+
+%%
+theArtistRehaussee = Rehaussement_Contour(theArtistConvolue, 1/15);
+imshow(theArtistRehaussee);
+
+%% 1.5.
+
+% TODO: Revoir
+
+% Les contours de l'image rehaussée sont ressortis. Cela est dû au fait que
+% le filtre Laplacien conserve les contours, soient les transitions de
+% couleur de pixels. En additionnant les contours, ou dans notre cas une
+% fraction de ceux-ci, on fait ressortir les contours de l'image originale.
+
+% Un filtre médian adaptatif pourrait être utilisé pour enlever le bruit.
+
+%% Exercice 2: Compteur de monnaie
+close all;
+clear all;
+clc;
+
+%% 2.1.
+pieces = imread("pieces.jpg");
+pieces = rgb2gray(pieces);
+
+imshow(pieces);
+
+%% 2.2.
+
+%%
+% Voici le détail de la fonction Binariser.m
+type Binariser.m;
+
+%%
+piecesBinarisee = Binariser(pieces, 250);
+piecesBinarisee(piecesBinarisee==0) = 1 ;
+piecesBinarisee(piecesBinarisee==255) = 0 ;
+piecesBinarisee(piecesBinarisee==1) = 255 ;
+
+imshow(piecesBinarisee);
+
+%% 2.3.
+
+elementStructurant = strel('disk', 10, 4);
+piecesFermee = imclose(piecesBinarisee, elementStructurant);
+
+imshow(piecesFermee);
+
+%% 2.4.
+%%
+% Voici le détail de la fonction Compter_Monnaie.m
+type Compter_Monnaie.m;
+
+%%
+total = Compter_Monnaie(piecesFermee);
+
+%%
+% Voici le total calculé par la fonction Compter_Monnaie.m en $:
+disp(total);
+
+
+%% Exercice 3: Transformée de Fourier 2D
+close all;
+clear all;
+clc;
+
+%% 3.1.
+verticales = imread("Barres_Verticales.png");
+imshow(verticales);
+
+%%
+horizontales = imread("Barres_Horizontales.png");
+imshow(horizontales);
+
+%%
+obliques = imread("Barres_Obliques.png");
+imshow(obliques);
+
+%% 3.2.
+% Voici le spectre de l'image: Barres_Verticales
+fft2_verticales = fft2(verticales);
+module_verticales = abs(fft2_verticales);
+module_verticales = module_verticales / length(module_verticales);
+shift_verticales = fftshift(module_verticales);
+imshow(log10(1 + shift_verticales), []);
+
+%%
+% Voici le spectre de l'image: Barres_Horizontales
+fft2_horizontales = fft2(horizontales);
+module_horizontales = abs(fft2_horizontales);
+module_horizontales = module_horizontales / length(module_horizontales);
+shift_horizontales = fftshift(module_horizontales);
+imshow(log10(1 + shift_horizontales), []);
+
+%%
+% Voici le spectre de l'image: Barres_Obliques
+fft2_obliques = fft2(obliques);
+module_obliques = abs(fft2_obliques);
+module_obliques = module_obliques / length(module_obliques);
+shift_obliques = fftshift(module_obliques);
+imshow(log10(1 + shift_obliques), []);
+
+
+%% 3.3.
+verticales = imread("Barres_Verticales.png");
+verticales_rotation70 = imrotate(verticales, 70, 'bilinear', 'crop');
+imshow(verticales_rotation70)
+
+%%
+fft2_verticales = fft2(verticales_rotation70);
+module_verticales = abs(fft2_verticales);
+module_verticales = module_verticales / length(module_verticales);
+shift_verticales = fftshift(module_verticales);
+imshow(log10(1 + shift_verticales), []);
+
+
+%% 3.4.
+
+% TODO revoir: pas certain des fft2 par rapport à la normalisation
+% http://www.cs.toronto.edu/~jepson/csc320/notes/linearFilters2.pdf
+% https://www.eee.hku.hk/~work8501/WWW2008/ho4.pdf
+
+% Il est possible d'inférer qu'une transformée de Fourier 2D respecte les
+% propriétées suivantes:
+% 1. Symétrie: ?
+% 2. Rotaton: une rotation d'une image d'un angle ? implique que sa 
+% 3. Shift/Translation?
+% transformée de Fourier est également tournée d'un même angle.
+
+
+%% Exercice 4: Filtrage spectral
+close all;
+clear all;
+clc;
+
+%% 4.1.
+maillot = imread("maillot.png");
+fft2_maillot = fft2(maillot);
+norm_maillot = fft2_maillot / length(fft2_maillot);
+module_maillot = abs(norm_maillot);
+shift_maillot = fftshift(module_maillot);
+imshow(log10(1 + shift_maillot), []);
+
+%% 4.2.
+
+% Voici notre réponse textuelle. Voir le schéma ci-dessous pour plus de
+% détails.
+
+% Manche côté gauche (avec moins de lignes): diagonale pente négative principale
+% Manche côté droit (avec beaucoup de lignes): diagonale pente positive principale
+% Col: Voir ci-dessous
+% Pochette: Ligne centrale verticale
+% Torse: ligne centrale horizontale
+
+%%
+spectre_identifie = imread("spectre_identifie.png");
+imshow(spectre_identifie);
+
+%%
+% Détail pour l'identification du spectre du col:
+
+% Premièrement, nous avons isolé le col:
+col = imread("col.png");
+col = rgb2gray(col);
+imshow(col);
+
+%%
+% Détail pour l'identification du spectre du col:
+
+% Deuxièmement, nous avons calcul son spectre:
+fft2_col = fft2(col);
+norm_col = fft2_col / length(fft2_col);
+module_col = abs(norm_col);
+shift_col = fftshift(module_col);
+imshow(log10(1 + shift_col), []);
+
+%% 4.3.
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+H = fspecial('gaussian', size(maillot), 60);
+H = H./max(H(:));
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+
+%% 4.4 
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+
+H = fspecial('gaussian', size(maillot), 60);
+F = fftshift(fft2(maillot));
+H = H./max(H(:));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+
+high_pass_filtered_maillot = maillot - low_pass_filtered_maillot;
+imshow(high_pass_filtered_maillot);
+ 
+%% 4.5.
+
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+H = imread("filter4_5_7.png");
+H = rgb2gray(H);
+H = double(H)/255;
+
+%%
+% Voici le filtre idéal que avons créé et utilisé pour conserver uniquement 
+% la texture des deux manches.
+imshow(H);
+
+%%
+% Voici le résultat final:
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+
+%% 4.6.
+
+maillot = imread("maillot.png");
+maillot = double(maillot)/255;
+H = imread("filter4_6.png");
+H = rgb2gray(H);
+H = double(H)/255;
+
+%%
+% Voici le filtre idéal que avons créé et utilisé pour faire disparaitre 
+% la texture du torse.
+imshow(H);
+
+%%
+% Voici le résultat final:
+F = fftshift(fft2(maillot));
+low_pass_filtered_maillot = real(ifft2(ifftshift(H.*F)));
+imshow(low_pass_filtered_maillot);
+
+%% 4.7.
+
+% Un filtre idéal est un filtre passe-bas. De plus,
+% le masque spatial de convolution d'un filtre idéal   
+% contient des ondulations. Lorsqu'on applique un filtre sur une image ces
+% ondulations causent des cercles d'artefacts sur l'image finale.
+
+% Le filtre Butterworth est aussi un filtre passe-bas. Par contre, 
+% les ondulations qui peuvent se trouver dans son masque spatial de 
+% convolution son grandement atténuées puisque la transistion entre le cercle
+% central blanc et le noir l'entourant est beaucoup plus lisse que dans un  
+% filtre idéal. Cela permet par le même fait de significativement diminuer
+% le nombre d'artefacts dans l'image finale. Par contre, il est important de 
+% noter que lorsque l'ordre du filtre Butterworth augmente celui-ci se   
+% rapproche d'un filtre idéal et donc il y aura apparition d'artéfacts.
+
+%% 4.8.
+
+% La fréquence 0 correspond à la fréquence moyenne du spectre. En enlevant
+% cette valeur on se retrouve donc à la soustraire de toutes les autres
+% fréquences. Cette soustraction correspond à une translation de l'ensemble
+% du spectre de fréquences vers 0. Il est donc possible d'affirmer que l'image
+% résultante sera plus "noire" que l'image originale ou égale.
+
+
+%% 4.9.
+
+% Puisque les composantes du maillot apparaissent en ordre décroissant de
+% fréquence (alternance entre lignes blanches et noires rapide) nous avons donc
+% besoin d'un filtre passe haut qui laisse passer de plus en plus de basses
+% fréquences.
+% Il est possible de produire ce comportement à l'aide d'un filtre idéal
+% passe haut avec initialement une grande fréquence de coupure  (donc un cercle noir 
+% centré avec un grand rayon). Ensuite, diminuer la fréquence de coupure 
+% petit à petit jusqu'à ce que celle-ci soit 0 et donc aucune fréquence 
+% ne sera coupée ce qui permettra d'obtenir la couleur moyenne de l'image. 
+
+
+
+
+##### SOURCE END #####
+--></body></html>
