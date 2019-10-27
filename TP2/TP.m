@@ -39,8 +39,6 @@ imshow(theArtistRehaussee);
 
 %% 1.5.
 
-% TODO: Revoir
-
 % Les contours de l'image rehaussée sont ressortis. Cela est dû au fait que
 % le filtre Laplacien conserve les contours, soient les transitions de
 % couleur de pixels. En additionnant les contours, ou dans notre cas une
@@ -156,8 +154,10 @@ imshow(log10(1 + shift_verticales), []);
 
 % Il est possible d'inférer qu'une transformée de Fourier 2D respecte les
 % propriétées suivantes:
-% 1. Symétrie: ?
-% 2. Rotaton: une rotation d'une image d'un angle ? implique que sa 
+% 1. Symétrie: La transformée de Fourier est clairement symétrique.
+% 2. Rotation: Il est possible de voir qu'une rotation d'une image d'un
+% angle x implique que sa transformée de fourier subit une rotation d'un 
+% angle x elle aussi.
 % 3. Shift/Translation?
 % transformée de Fourier est également tournée d'un même angle.
 
