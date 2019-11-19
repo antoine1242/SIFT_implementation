@@ -48,30 +48,30 @@ def difference_de_gaussiennes(image_initiale, s: int, nb_octave: int):
             dogs[octave].append(diff_norm)
         sigmas.append(gaussian_filtered_images_sigmas[octave][:-1])
 
-
     return dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas
-    
-# TODO les traitements doivent etre fait avec image noire et blanche
-img = cv2.imread("./images/lena_claire.jpg", cv2.IMREAD_COLOR).astype("float32")
 
-#display_img(img)
-dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img, 3, 2)
+def test():
+    # TODO les traitements doivent etre fait avec image noire et blanche
+    img = cv2.imread("./images/lena_claire.jpg", cv2.IMREAD_COLOR).astype("float32")
+    img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
-fig = plt.figure(figsize=(2,3))
-for i in range(1, 6+1):
-    fig.add_subplot(2, 3, i)
-    plt.imshow(gaussian_filtered_images[1][i-1])
-plt.show()
+    dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img, s=3, nb_octave=2)
 
-fig = plt.figure(figsize=(2,3))
-for i in range(1, 6):
-    fig.add_subplot(2, 3, i)
-    plt.imshow(dogs[1][i-1])
-plt.show()
+    fig = plt.figure(figsize=(2,3))
+    for i in range(1, 6+1):
+        fig.add_subplot(2, 3, i)
+        plt.imshow(gaussian_filtered_images[1][i-1])
+    plt.show()
 
-print(np.amax(dogs[0][0]))
+    fig = plt.figure(figsize=(2,3))
+    for i in range(1, 6):
+        fig.add_subplot(2, 3, i)
+        plt.imshow(dogs[1][i-1])
+    plt.show()
 
-#print(gaussian_filtered_images[0][0])
-#print(dogs[0][1])
-#display_img(dogs[0][1])
+    print(np.amax(dogs[0][0]))
+
+    #print(gaussian_filtered_images[0][0])
+    #print(dogs[0][1])
+    #display_img(dogs[0][1])
 
