@@ -51,7 +51,6 @@ def difference_de_gaussiennes(image_initiale, s: int, nb_octave: int):
     return dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas
 
 def test():
-    # TODO les traitements doivent etre fait avec image noire et blanche
     img = cv2.imread("./images/lena_claire.jpg", cv2.IMREAD_COLOR).astype("float32")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 

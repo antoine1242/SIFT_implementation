@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+# TODO: resolution_octave ajuster position keypoint dans l,image selon la résolution de l'image à l'octave donnée.
+
 def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("detectionPointsCles")
     cnt_candidates_curr = 0
@@ -17,6 +19,7 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
         current = dog[i]
         nextDog = dog[i+1]
         candidate_keypoints = []
+
         for x in range(1, len(previous)-1):
             for y in range(1, len(previous[0])-1):
                 if isExtremum(previous, current, nextDog, x, y):
@@ -51,7 +54,7 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
     print(cnt_removed_edge)
     print(cnt_candidates)
     keypoints_m_and_theta = []
-    for keypoint in keypoints_filtered[:1]:
+    for keypoint in keypoints_filtered:
         # TODO est-ce que le sigma est suppose etre "proche" ou exact
         x_kp = keypoint[0]
         y_kp = keypoint[1]
@@ -81,7 +84,7 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
                 dy = L[x][min(L.shape[1]-1, y+1)] - L[x][max(y-1, 0)]
                 m = np.sqrt(dx**2 + dy**2)
                 #theta = (np.arctan(dy/dx)+np.pi) * 180/np.pi
-                theta = (np.arctan(dy/dx)) * 180/np.pi
+                theta = (np.arctan2(dy, dx)) * 180/np.pi
                 
                 weight = circular_gaussian_window[dx_zone + range_zone][dy_zone + range_zone] * m
 
@@ -89,8 +92,19 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
                 hist[bin_number] += weight
 
         max_bin = np.argmax(hist)
+        keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, max_bin, bin_size)))
 
-        keypoints_m_and_theta.append(keypoint[0], keypoint[1], keypoint[2], find_angle(hist, max_bin, bin_size))
+        max_val = np.max(hist)
+        for bin_index, m in enumerate(hist):
+            if bin_index == max_bin: 
+                continue
+
+            if m >= .8 * max_val:
+                keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, bin_index, bin_size)))
+
+    return np.array(keypoints_m_and_theta)
+
+
 
 def find_angle(hist, max_bin, bin_size):
     bin_number = len(hist)
@@ -103,51 +117,26 @@ def find_angle(hist, max_bin, bin_size):
     rigth_y = hist[(max_bin+1) % bin_number]
     left_y = hist[(max_bin+1) % bin_number]
 
-    x_coordinates = np.array([center_x**2, center_x, 1],
+    x_coordinates = np.array([[center_x**2, center_x, 1],
                              [left_x**2, left_x, 1],
-                             [rigth_x**2, rigth_x, 1])
+                             [rigth_x**2, rigth_x, 1]])
     y_coordinates = np.array([center_y, left_y, rigth_y])
 
-    np.linalg.lstsq(y_coordinates, x_coordinates)
+    result = np.linalg.lstsq(x_coordinates, y_coordinates, rcond=None)[0]
+    a = result[0]
+    b = result[1]
+
+    if a == 0: 
+        a = 1e-6
+    #print(-b/(2*a))
+
+    return -b/(2*a)
 
 
 
-        # TODO reste du code de l'article 
 
 
-
-        # max_val = np.max(hist)
-        # for binno, val in enumerate(hist):
-        #     if binno == max_bin: continue
-
-        #     if .8 * max_val <= val:
-        #         new_kps.append([kp[0], kp[1], kp[2], fit_parabola(hist, binno, bin_width)])
-
-        # def fit_parabola(hist, binno, bin_width):
-        #     centerval = binno*bin_width + bin_width/2.
-
-        #     if binno == len(hist)-1: rightval = 360 + bin_width/2.
-        #     else: rightval = (binno+1)*bin_width + bin_width/2.
-
-        #     if binno == 0: leftval = -bin_width/2.
-        #     else: leftval = (binno-1)*bin_width + bin_width/2.
-            
-        #     A = np.array([
-        #         [centerval**2, centerval, 1],
-        #         [rightval**2, rightval, 1],
-        #         [leftval**2, leftval, 1]])
-        #     b = np.array([
-        #         hist[binno],
-        #         hist[(binno+1)%len(hist)], 
-        #         hist[(binno-1)%len(hist)]])
-
-        #     x = LA.lstsq(A, b, rcond=None)[0]
-        #     if x[0] == 0: x[0] = 1e-6
-        #     return -x[1]/(2*x[0])
-
-
-
-        # TODO est-ce qu'on compute toute la matrice des m et tetha avant?
+        #   est-ce qu'on compute toute la matrice des m et tetha avant?
         # mag_theta_matrix = np.zeros(L.shape)
         # for x in range(mag_theta_matrix.shape[0]):
         #     for x in range(mag_theta_matrix.shape[1]):
@@ -158,16 +147,6 @@ def find_angle(hist, max_bin, bin_size):
         #         mag_theta_matrix[x][y] = (m, theta)
 
 
-
-
-
-
-        #keypoints_m_and_theta.append((x, y, sigma, m, theta))
-
-    for keypoint in keypoints_m_and_theta:
-        pass
-        # get neighbours
-        # 
 
 def dogDerivative(stack_of_dog, candidate_keypoint):
     x = candidate_keypoint[0]
@@ -238,9 +217,7 @@ def isExtremum(previous, current, nextDog, x, y):
 
 # https://stackoverflow.com/questions/29731726/how-to-calculate-a-gaussian-kernel-matrix-efficiently-in-numpy
 def gaussian_filter(sigma):
-    length = 6 * np.ceil(sigma)
-    if length % 2 == 0:
-        length += 1
+    length = 2 * np.ceil(3*sigma) + 1
 
     ax = np.linspace(-(length - 1) / 2, (length - 1) / 2, length)
     xx, yy = np.meshgrid(ax, ax)
