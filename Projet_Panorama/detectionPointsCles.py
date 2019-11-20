@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 
 def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("detectionPointsCles")
@@ -50,17 +51,14 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
     print(cnt_removed_edge)
     print(cnt_candidates)
     keypoints_m_and_theta = []
-    for keypoint in keypoints_filtered:
+    for keypoint in keypoints_filtered[:1]:
         # TODO est-ce que le sigma est suppose etre "proche" ou exact
         x_kp = keypoint[0]
-        x_kp = keypoint[1]
+        y_kp = keypoint[1]
         sigma = keypoint[2]
-        
-        range_zone = int(2*np.ceil(sigma) + 1)
+        circular_gaussian_window = gaussian_filter(1.5 * sigma)
 
-        # s = np.clip(s, 0, octave.shape[2] - 1) ???
-        # TODO: 
-        #kernel = gaussian_filter(image_initiale_norm, sigma=sigma) 
+        range_zone = int(2*np.ceil(sigma) + 1)
 
         # TODO: Comment trouver le bon L
         # TODO: Comment trouver le nombre de pixels a observer autour
@@ -73,27 +71,50 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
         for dx_zone in range(-range_zone, range_zone + 1):
             for dy_zone in range(-range_zone, range_zone + 1):
                 x = x_kp + dx_zone
-                y = x_kp + dy_zone
+                y = y_kp + dy_zone
 
+                # Quoi faire pour les dérivées sur les côtés?
                 if x < 0 or x > L.shape[0] - 1 or y < 0 or y > L.shape[1] - 1: 
                     continue
 
                 dx = L[min(L.shape[0]-1, x+1)][y] - L[max(x-1, 0)][y]
                 dy = L[x][min(L.shape[1]-1, y+1)] - L[x][max(y-1, 0)]
                 m = np.sqrt(dx**2 + dy**2)
-                theta = (np.arctan(dy/dx)+np.pi) * 180/np.pi
+                #theta = (np.arctan(dy/dx)+np.pi) * 180/np.pi
+                theta = (np.arctan(dy/dx)) * 180/np.pi
                 
-                # TODO: ajuster poids de m 
-                #weight = kernel[oy+w, ox+w] * m
-                weight = m 
+                weight = circular_gaussian_window[dx_zone + range_zone][dy_zone + range_zone] * m
 
                 bin_number = int(np.floor(theta) // bin_size)
                 hist[bin_number] += weight
 
+        max_bin = np.argmax(hist)
+
+        keypoints_m_and_theta.append(keypoint[0], keypoint[1], keypoint[2], find_angle(hist, max_bin, bin_size))
+
+def find_angle(hist, max_bin, bin_size):
+    bin_number = len(hist)
+
+    center_x = max_bin * bin_size + bin_size / 2
+    rigth_x = center_x + bin_size
+    left_x = center_x - bin_size
+
+    center_y = hist[max_bin]
+    rigth_y = hist[(max_bin+1) % bin_number]
+    left_y = hist[(max_bin+1) % bin_number]
+
+    x_coordinates = np.array([center_x**2, center_x, 1],
+                             [left_x**2, left_x, 1],
+                             [rigth_x**2, rigth_x, 1])
+    y_coordinates = np.array([center_y, left_y, rigth_y])
+
+    np.linalg.lstsq(y_coordinates, x_coordinates)
+
+
+
         # TODO reste du code de l'article 
 
-        # max_bin = np.argmax(hist)
-        # new_kps.append([kp[0], kp[1], kp[2], fit_parabola(hist, max_bin, bin_width)])
+
 
         # max_val = np.max(hist)
         # for binno, val in enumerate(hist):
@@ -215,3 +236,15 @@ def isExtremum(previous, current, nextDog, x, y):
 
     return True
 
+# https://stackoverflow.com/questions/29731726/how-to-calculate-a-gaussian-kernel-matrix-efficiently-in-numpy
+def gaussian_filter(sigma):
+    length = 6 * np.ceil(sigma)
+    if length % 2 == 0:
+        length += 1
+
+    ax = np.linspace(-(length - 1) / 2, (length - 1) / 2, length)
+    xx, yy = np.meshgrid(ax, ax)
+
+    kernel = np.exp(-0.5 * (np.square(xx) + np.square(yy)) / np.square(sigma))
+
+    return kernel / np.sum(kernel)
