@@ -28,7 +28,7 @@ def difference_de_gaussiennes(image_initiale, s: int, nb_octave: int):
         result = gaussian_filter(image_initiale_norm, sigma=sigma_img) 
         gaussian_filtered_images[0].append(result)
         gaussian_filtered_images_sigmas[0].append(sigma_img)
-        print(type(result))
+        #print(type(result))
 
     # Octave 2 a nb_octave
     for i in range(1, nb_octave):

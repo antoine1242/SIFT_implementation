@@ -58,7 +58,7 @@ def run():
     #    print(k)
     # display_img_with_keypoints(img_color, keypoints)
 
-    keypoints_description = descriptionPointsCles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas)
+    keypoints_description = descriptionPointsCles(keypoints, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     """
     fig = plt.figure(figsize=(2,3))

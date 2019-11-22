@@ -13,7 +13,6 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
     nb_bins = 10
     bin_size = 360 // nb_bins
 
-
     for i in range(1, len(dog)-1):
         previous = dog[i-1]
         current = dog[i]
