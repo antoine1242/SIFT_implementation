@@ -27,5 +27,4 @@ def get_k_lowest(descriptors_distance_matrix, k):
                     k_lowest.sort(reverse = True)
                     break
 
-    print("K_lowest: ", k_lowest)
     return k_lowest

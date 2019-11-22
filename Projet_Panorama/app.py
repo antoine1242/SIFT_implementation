@@ -18,8 +18,8 @@ def run():
     print("Project Pano is running!")
     
     print("Image 1")
-    img_color = imread("./images/droite.jpg")
-    img = rgb2gray(img_color)
+    img_color1 = imread("./images/droite.jpg")
+    img1 = rgb2gray(img_color1)
     #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     """
     print(type(img))
@@ -27,29 +27,47 @@ def run():
     cv2.waitKey(0)
     cv2.destroyAllWindows()
     """
-    dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img, 3, 2)
+    dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img1, 3, 2)
 
-    keypoints = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
     #for k in keypoints:
     #    print(k)
     # display_img_with_keypoints(img_color, keypoints)
 
-    keypoints_descriptors1 = descriptionPointsCles(keypoints, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints_descriptors1 = descriptionPointsCles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     print("Image 2")
-    img_color = imread("./images/gauche.jpg")
-    img = rgb2gray(img_color)
+    img_color2 = imread("./images/gauche.jpg")
+    img2 = rgb2gray(img_color2)
 
-    dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img, 3, 2)
+    dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img2, 3, 2)
 
-    keypoints = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints2 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
-    keypoints_descriptors2 = descriptionPointsCles(keypoints, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints_descriptors2 = descriptionPointsCles(keypoints2, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     print("Matrice de distance")
     distance_matrix = distance_inter_points(keypoints_descriptors1, keypoints_descriptors2)
 
     k_lowest = get_k_lowest(distance_matrix, 10)
+
+    keypoints_matched1 = []
+    keypoints_matched2 = []
+
+    for k in range(len(k_lowest)):
+        idx_image1 = k_lowest[k][1]
+        idx_image2 = k_lowest[k][2]
+        keypoints_matched1.append(keypoints1[idx_image1])
+        keypoints_matched2.append(keypoints2[idx_image2])
+
+    print("keypoints_matched1: ", keypoints_matched1)
+    print("keypoints_matched2: ", keypoints_matched2)
+
+    #keypoints_matched1 = [(361., 335., 2.53984168, 18.), ([476., 223., 2.01587368, 162.), ([325., 313., 2.01587368, 198.), (276., 303., 3.2, 342.), (439.,  33., 3.2, 342.), (236., 238., 2.01587368, 162.), (236., 238., 2.01587368, 162.), (236., 238., 2.01587368, 342.), (236., 238., 2.01587368, 342.), (366.,  19., 2.01587368, 18.)]
+    #keypoints_matched2 = [(361., 935., 2.53984168, 18.), ([473., 824., 2.01587368, 162.), ([325., 914., 2.01587368, 198.), (277., 905., 3.2, 342.), (435., 637., 3.2, 342.), (237., 841., 2.01587368, 162.), (237., 841., 2.01587368, 342.), (237., 841., 2.01587368, 162.), (237., 841., 2.01587368, 342.), (363., 624., 2.01587368, 18.)]
+
+    display_img_with_keypoints(img_color1, keypoints_matched1)
+    display_img_with_keypoints(img_color2, keypoints_matched2)
 
     """
     fig = plt.figure(figsize=(2,3))
@@ -99,3 +117,15 @@ def display_img_with_keypoints(img, keypoints):
     plt.show()
 
 run()
+
+#Pour pas avoir à tout exécuter pour trouver les keypoints
+"""
+img_color1 = imread("./images/droite.jpg")
+img_color2 = imread("./images/gauche.jpg")
+
+keypoints_matched1 = [(361., 335., 2.53984168, 18.), (476., 223., 2.01587368, 162.), (325., 313., 2.01587368, 198.), (276., 303., 3.2, 342.), (439.,  33., 3.2, 342.), (236., 238., 2.01587368, 162.), (236., 238., 2.01587368, 162.), (236., 238., 2.01587368, 342.), (236., 238., 2.01587368, 342.), (366.,  19., 2.01587368, 18.)]
+keypoints_matched2 = [(361., 935., 2.53984168, 18.), (473., 824., 2.01587368, 162.), (325., 914., 2.01587368, 198.), (277., 905., 3.2, 342.), (435., 637., 3.2, 342.), (237., 841., 2.01587368, 162.), (237., 841., 2.01587368, 342.), (237., 841., 2.01587368, 162.), (237., 841., 2.01587368, 342.), (363., 624., 2.01587368, 18.)]
+
+display_img_with_keypoints(img_color1, keypoints_matched1)
+display_img_with_keypoints(img_color2, keypoints_matched2)
+"""
