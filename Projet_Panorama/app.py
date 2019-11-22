@@ -4,6 +4,7 @@ import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 from descriptionPointsCles import descriptionPointsCles
 from detectionPointsCles import detectionPointsCles, isExtremum
+from matching import match_neighbors
 import cv2
 from skimage.io import imread
 from skimage.color import rgb2gray
@@ -59,6 +60,7 @@ def run():
     # display_img_with_keypoints(img_color, keypoints)
 
     keypoints_description = descriptionPointsCles(keypoints, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+
 
     """
     fig = plt.figure(figsize=(2,3))
