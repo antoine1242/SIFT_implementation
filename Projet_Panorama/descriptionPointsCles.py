@@ -1,7 +1,10 @@
 import numpy as np
 from detectionPointsCles import gaussian_filter
+import os
 
 def descriptionPointsCles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas):
+    print("Description des points cles")
+
     keypoints_descriptors = []
     
     nb_bins = 8
@@ -9,7 +12,7 @@ def descriptionPointsCles(keypoints, gaussian_filtered_images, gaussian_filtered
     region_length = 4
     window_length = region_length * nb_regions
     
-    for keypoint in keypoints[:1]:
+    for keypoint in keypoints:
         x_kp = keypoint[0]
         y_kp = keypoint[1]
         sigma = keypoint[2]
@@ -51,6 +54,9 @@ def descriptionPointsCles(keypoints, gaussian_filtered_images, gaussian_filtered
                 hist = np.zeros(nb_bins, dtype=np.float32)
                 for k in range(i, i + region_length):
                     for m in range(j, j + 4):
+                        # Vaut 0 si le pixel est hors de l'image
+                        if gradients_matrix[k][m] == 0:
+                            continue
                         mag = gradients_matrix[k][m][0]
                         theta = gradients_matrix[k][m][1]
                 
