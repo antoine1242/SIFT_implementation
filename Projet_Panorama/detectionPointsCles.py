@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-# TODO: resolution_octave ajuster position keypoint dans l,image selon la résolution de l'image à l'octave donnée.
+# TODO: resolution_octave ajuster position keypoint dans l'image selon la résolution de l'image à l'octave donnée.
 
 def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Detection des points cles")
@@ -20,20 +20,23 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
         nextDog = dog[i+1]
         candidate_keypoints = []
 
+        # Sélection des points clés candidats
         for x in range(1, len(previous)-1):
             for y in range(1, len(previous[0])-1):
                 if isExtremum(previous, current, nextDog, x, y):
                     candidate_keypoints.append((x,y,sigma[i]))
                     cnt_candidates_curr += 1
         
-        # Élimination point clés faible constraste
+        # Élimination de certains point clés candidats
         for candidate_keypoint in candidate_keypoints:
             stack_of_dog = np.asarray([previous, current, nextDog])
 
             D_of_x, detH, ratio = dogDerivative(stack_of_dog, candidate_keypoint) 
 
+            # Élimination des points-clés de faible contraste
             if D_of_x < seuil_contraste:
                 cnt_removed_contrast += 1
+            # Élimination des points situés sur les arêtes 
             elif detH < 0 or ratio > (r_courbure_principale + 1)**2 / r_courbure_principale:
                 cnt_removed_edge += 1
             else:
@@ -50,21 +53,19 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
         if (x, y) not in check_val:
             keypoints_filtered.append((x, y, s))
 
-    print(cnt_removed_contrast)
-    print(cnt_removed_edge)
-    print(cnt_candidates)
+    print("cnt_removed_contrast", cnt_removed_contrast)
+    print("cnt_removed_edge", cnt_removed_edge)
+    print("cnt_candidates", cnt_candidates)
+
     keypoints_m_and_theta = []
     for keypoint in keypoints_filtered:
-        # TODO est-ce que le sigma est suppose etre "proche" ou exact
         x_kp = keypoint[0]
         y_kp = keypoint[1]
         sigma = keypoint[2]
         circular_gaussian_window = gaussian_filter(1.5 * sigma)
 
+        # On pause la range_zone
         range_zone = int(2*np.ceil(sigma) + 1)
-
-        # TODO: Comment trouver le bon L
-        # TODO: Comment trouver le nombre de pixels a observer autour
 
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]
@@ -128,55 +129,33 @@ def find_angle(hist, max_bin, bin_size):
 
     if a == 0: 
         a = 1e-6
-    #print(-b/(2*a))
 
-    return -b/(2*a)
-
-
-
-
-
-        #   est-ce qu'on compute toute la matrice des m et tetha avant?
-        # mag_theta_matrix = np.zeros(L.shape)
-        # for x in range(mag_theta_matrix.shape[0]):
-        #     for x in range(mag_theta_matrix.shape[1]):
-        #         dx = L[x+1][y] - L[x-1][y]
-        #         dy = L[x][y+1] - L[x][y-1]
-        #         m = np.sqrt(dx**2 + dy**2)
-        #         theta = (np.arctan(dy/dx)+np.pi) * 180/np.pi
-        #         mag_theta_matrix[x][y] = (m, theta)
+    return -b / (2 * a)
 
 
 
 def dogDerivative(stack_of_dog, candidate_keypoint):
     x = candidate_keypoint[0]
     y = candidate_keypoint[1]
+    s = 1 
 
-    s = 1
+    # 1. Obtenir évaluation de D au point candiat x -> D(x)
     dx = (stack_of_dog[s][x+1][y] - stack_of_dog[s][x-1][y]) / 2.
     dy = (stack_of_dog[s][x][y+1] - stack_of_dog[s][x][y-1]) / 2.
     ds = (stack_of_dog[s+1][x][y] - stack_of_dog[s-1][x][y]) / 2.
 
+    d_dx = np.array([dx, dy, ds])
+
+    X = np.array(candidate_keypoint)
+
+    D_of_x = stack_of_dog[s][x][y] + 0.5 * (d_dx.dot(X))
+
+
+    # 2. Obtenir Ratio pour la courbature
     dxx = (stack_of_dog[s][x+1][y] - 2*stack_of_dog[s][x][y] + stack_of_dog[s][x-1][y]) 
     dyy = (stack_of_dog[s][x][y+1] - 2*stack_of_dog[s][x][y] + stack_of_dog[s][x][y-1]) 
-    dss = (stack_of_dog[s+1][x][y] - 2*stack_of_dog[s][x][y] + stack_of_dog[s-1][x][y]) 
-
     dxy = ((stack_of_dog[s][x+1][y+1] - stack_of_dog[s][x-1][y+1]) - (stack_of_dog[s][x+1][y-1] - stack_of_dog[s][x-1][y-1])) /4.
-    dxs = ((stack_of_dog[s+1][x+1][y] - stack_of_dog[s+1][x-1][y]) - (stack_of_dog[s-1][x+1][y] - stack_of_dog[s-1][x-1][y])) /4.
-    dys = ((stack_of_dog[s+1][x][y+1] - stack_of_dog[s+1][x][y-1]) - (stack_of_dog[s-1][x][y+1] - stack_of_dog[s-1][x][y-1])) /4.
 
-    d_dx = np.asarray([dx, dy, ds])
-    dd_dxx = np.asarray([
-        [dxx, dxy, dxs],
-        [dxy, dyy, dys],
-        [dxs, dys, dss]
-    ])
-
-    X = np.asarray(candidate_keypoint) # + (-np.linalg.inv(dd_dxx)).dot(d_dx)
-
-    D_of_x = stack_of_dog[s][x][y] + 0.5 * ((d_dx).dot(X)) 
-
-    # Ratio pour la courbature
     traceH = dxx + dyy
     detH = dxx*dyy - dxy**2
 

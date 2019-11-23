@@ -11,8 +11,16 @@ from skimage.io import imread
 from skimage.color import rgb2gray
 from matplotlib.patches import Circle, Arrow
 import math 
+from detectionPointsCles import gaussian_filter
 
-# TODO: si on veux: le chargé fit contraste avant extremum
+# TODO: si on veut: le chargé fit contraste avant extremum
+
+def display_gaussian_window(s):
+    kernel = gaussian_filter(s)
+    #print(kernel.shape)
+    plt.imshow(kernel)
+    plt.show()
+
 
 def run():
     print("Project Pano is running!")
@@ -20,17 +28,12 @@ def run():
     print("Image 1")
     img_color1 = imread("./images/droite.jpg")
     img1 = rgb2gray(img_color1)
-    #img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
-    """
-    print(type(img))
-    cv2.imshow('image',img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    """
+
+
     dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img1, 3, 2)
 
     keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
-    #for k in keypoints:
+    # for k in keypoints:
     #    print(k)
     # display_img_with_keypoints(img_color, keypoints)
 
