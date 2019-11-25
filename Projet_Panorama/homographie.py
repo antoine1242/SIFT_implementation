@@ -14,7 +14,9 @@ def obtenir_matrice_A(keypoints_matched1, keypoints_matched2):
         matrix_A.append([x1, y1, 1, 0, 0, 0, -x2*x1, -x2*y1, -x2])
         matrix_A.append([0, 0, 0, x1, y1, 1, -y2*x1, -y2*y1, -y2])
 
-    return np.array(matrix_A)
+    matrix_A = np.array(matrix_A)
+
+    return matrix_A
 
 
 def calcul_matrice_H_avec_eig(keypoints_matched1, keypoints_matched2, verbose=False):
@@ -35,9 +37,15 @@ def calcul_matrice_H_avec_eig(keypoints_matched1, keypoints_matched2, verbose=Fa
 
     H_flatten = vecteurs_propres[:, idx_smallest_eigenvalue]
 
-    H_flatten_norm = H_flatten / H_flatten[-1]
+    H_flatten = H_flatten / H_flatten[-1]
+    
+    H_norm = np.reshape(H_flatten, (3,3))
 
-    H_norm = np.reshape(H_flatten_norm, (3,3))
+    # TODO on doit Norm ou / H_flatten[-1] ?
+    # if np.linalg.norm(H_norm) != 1.:
+    #     H_norm /= np.linalg.norm(H_norm)
+
+    
 
     return H_norm, H_flatten
 

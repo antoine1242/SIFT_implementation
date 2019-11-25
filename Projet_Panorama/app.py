@@ -104,25 +104,66 @@ def run():
     size (width,height) of im_dst
     '''
     H_inv = np.linalg.inv(H)
+    H_inv = H_inv / H_inv[2][2]
+    print()
     print("H_inv", H_inv)
-    #im_dst = warp(img2, H_inv)
 
 
-    #text = data.text()
+
+    print()
+    print("m nb_rows", len(img2))
+    print("n nb_columns", len(img2[0]))
+
+    coor_temp = np.array([1, 1, 1])
+    print()
+    print("coor_temp", coor_temp)
+    print()
+    print("H_inv@coor_temp", H_inv@coor_temp)
+
+    coor_temp = np.array([277, 207, 1])
+    print()
+    print("coor_temp", coor_temp)
+    print()
+    print("H_inv@coor_temp", H_inv@coor_temp)
+
+
+    coor_temp = np.array([494, 619, 1])
+    print()
+    print("coor_temp", coor_temp)
+    print()
+    print("H@coor_temp", H@coor_temp)
 
     tform = tf.SimilarityTransform(scale=1, rotation=math.pi/4,
                                 translation=(img2.shape[0]/2, -100))
 
+    print()
+    print("tform.params@coor_temp", tform.params@coor_temp)
+
+    new_img = np.zeros(img2.shape, dtype=np.float32)
+    for i in range(len(img2)):
+        for j in range(len(img2[0])):
+            #new_img[i][j] = img2[i][j]
+            coor_temp = np.array([i, j, 1])
+            new_coord = tform.params@coor_temp
+            # Si coordonnée est à l'extérieur de l'image on ne la considère pas
+            new_x = int(new_coord[0])
+            new_y = int(new_coord[1])
+            if new_x < 0 or new_x > img2.shape[0] - 1 or new_y < 0 or new_y > img2.shape[1] - 1: 
+                continue
+
+            new_img[new_x][new_y] = img2[i][j]
+
+    #display_img_with_keypoints(new_img, [], False)
 
 
 
+    #print("tform", tform.params)
 
+    matrix_H = H # tform.params 
+    matrix_H_inv = H_inv # np.linalg.inv(tform.params) # 
 
-
-    print("tform", tform.params)
-
-    rotated = tf.warp(img2, H)
-    back_rotated = tf.warp(img2, H_inv)
+    rotated = tf.warp(img2, matrix_H)
+    back_rotated = tf.warp(img2, matrix_H_inv)
 
     fig, ax = plt.subplots(nrows=3)
 
@@ -146,7 +187,7 @@ def display_img_with_keypoints(img, keypoints, has_angle):
     ax.set_aspect('equal')
 
     # Show the image
-    ax.imshow(img)
+    ax.imshow(img, cmap=plt.cm.gray)
 
     # Now, loop through coord arrays, and create a circle at each x,y pair
     for keypoint in keypoints:
