@@ -72,9 +72,24 @@ def run():
     # print("len(keypoints_matched2): ", len(keypoints_matched2))
 
     # print("AFTER REMOVE DUPLICATES")
-    # keypoints_matched1 = list(set(keypoints_matched1))
-    # keypoints_matched2 = list(set(keypoints_matched2))
+    # coordinates_dict = {}
+    # kept_indexes = []
+    # for i in range(len(keypoints_matched1)):
+    #     point = str(keypoints_matched1[i][0]) + "," + str(keypoints_matched1[i][1])
+        
+    #     if point not in coordinates_dict:
+    #         kept_indexes.append(i)
+    #         coordinates_dict[point] = 1
 
+    # keypoints_no_duplicates1 = []
+    # keypoints_no_duplicates2 = []
+
+    # for i in range(len(kept_indexes)):
+    #     keypoints_no_duplicates1.append(keypoints_matched1[kept_indexes[i]])
+    #     keypoints_no_duplicates2.append(keypoints_matched2[kept_indexes[i]])
+
+    # keypoints_matched1 = keypoints_no_duplicates1
+    # keypoints_matched2 = keypoints_no_duplicates2
 
     # print("keypoints_matched1: ", keypoints_matched1)
     # print("len(keypoints_matched1): ", len(keypoints_matched1))
@@ -85,10 +100,14 @@ def run():
 
 
 
-    keypoints_matched1 =  [(494.0, 619.0), (229.0, 638.0), (398.0, 924.0), (363.0, 624.0), (444.0, 766.0), (440.0, 645.0), (355.0, 818.0), (109.0, 988.0), (277.0, 810.0), (177.0, 749.0), (503.0, 749.0), (437.0, 760.0), (368.0, 908.0)]
-    keypoints_matched2 =  [(277.0, 207.0), (440.0, 157.0), (369.0, 307.0), (176.0, 144.0), (447.0, 164.0), (399.0, 323.0), (105.0, 386.0), (366.0, 19.0), (444.0, 41.0), (507.0, 147.0), (230.0, 32.0), (499.0, 15.0), (356.0, 216.0)]
+    #keypoints_matched1 =  [(494.0, 619.0), (229.0, 638.0), (398.0, 924.0), (363.0, 624.0), (444.0, 766.0), (440.0, 645.0), (355.0, 818.0), (109.0, 988.0), (277.0, 810.0), (177.0, 749.0), (503.0, 749.0), (437.0, 760.0), (368.0, 908.0)]
+    #keypoints_matched2 =  [(277.0, 207.0), (440.0, 157.0), (369.0, 307.0), (176.0, 144.0), (447.0, 164.0), (399.0, 323.0), (105.0, 386.0), (366.0, 19.0), (444.0, 41.0), (507.0, 147.0), (230.0, 32.0), (499.0, 15.0), (356.0, 216.0)]
 
+    keypoints_matched1 = [(444.0, 766.0), (503.0, 749.0), (494.0, 619.0), (229.0, 638.0), (437.0, 760.0), (277.0, 810.0), (355.0, 818.0), (398.0, 924.0), (109.0, 988.0), (368.0, 908.0), (177.0, 749.0), (363.0, 624.0), (440.0, 645.0)]
+    keypoints_matched2 = [(447.0, 164.0), (507.0, 147.0), (499.0, 15.0), (230.0, 32.0), (440.0, 157.0), (277.0, 207.0), (356.0, 216.0), (399.0, 323.0), (105.0, 386.0), (369.0, 307.0), (176.0, 144.0), (366.0, 19.0), (444.0, 41.0)]
 
+    #keypoints_matched1 = [(444.0, 766.0), (503.0, 749.0), (494.0, 619.0), (229.0, 638.0), (437.0, 760.0), (277.0, 810.0), (277.0, 810.0), (277.0, 810.0), (277.0, 810.0), (355.0, 818.0), (398.0, 924.0), (109.0, 988.0), (368.0, 908.0), (177.0, 749.0), (177.0, 749.0), (177.0, 749.0), (177.0, 749.0), (363.0, 624.0), (440.0, 645.0), (440.0, 645.0)]
+    #keypoints_matched2 = [(447.0, 164.0), (507.0, 147.0), (499.0, 15.0), (230.0, 32.0), (440.0, 157.0), (277.0, 207.0), (277.0, 207.0), (277.0, 207.0), (277.0, 207.0), (356.0, 216.0), (399.0, 323.0), (105.0, 386.0), (369.0, 307.0), (176.0, 144.0), (176.0, 144.0), (176.0, 144.0), (176.0, 144.0), (366.0, 19.0), (444.0, 41.0), (444.0, 41.0)]
 
     #display_img_with_keypoints(img_color1, keypoints_matched1, has_angle=False)
     #display_img_with_keypoints(img_color2, keypoints_matched2, has_angle=False)
@@ -131,32 +150,42 @@ def run():
     print()
     print("coor_temp", coor_temp)
     print()
-    print("H@coor_temp", H@coor_temp)
+    print("H_inv@coor_temp", H_inv@coor_temp)
 
-    tform = tf.SimilarityTransform(scale=1, rotation=math.pi/4,
-                                translation=(img2.shape[0]/2, -100))
-
+    coor_temp = np.array([len(img2), len(img2[0]), 1])
     print()
-    print("tform.params@coor_temp", tform.params@coor_temp)
+    print("coor_temp", coor_temp)
+    print()
+    shape_new_img = H_inv@coor_temp
+    print("H_inv@coor_temp", H_inv@coor_temp)
 
-    new_img = np.zeros(img2.shape, dtype=np.float32)
+    print("y", int(shape_new_img[0]))
+    print("x", int(shape_new_img[1]))
+
+    new_img = np.zeros((int(shape_new_img[0]), int(shape_new_img[1]), 3), dtype=np.float32)
     for i in range(len(img2)):
         for j in range(len(img2[0])):
-            #new_img[i][j] = img2[i][j]
             coor_temp = np.array([i, j, 1])
-            new_coord = tform.params@coor_temp
+            new_coord = H_inv@coor_temp
             # Si coordonnée est à l'extérieur de l'image on ne la considère pas
             new_x = int(new_coord[0])
             new_y = int(new_coord[1])
-            if new_x < 0 or new_x > img2.shape[0] - 1 or new_y < 0 or new_y > img2.shape[1] - 1: 
+            if new_x < 0 or new_x > shape_new_img[0] - 1 or new_y < 0 or new_y > shape_new_img[1] - 1: 
                 continue
+            new_img[new_x][new_y] = img_color2[i][j]/255.
 
-            new_img[new_x][new_y] = img2[i][j]
+    
+    for i in range(len(img1)):
+        for j in range(len(img1[0])):
+            if i < 0 or i > shape_new_img[0] - 1 or j < 0 or j > shape_new_img[1] - 1:
+                continue
+            new_img[i][j] = img_color1[i][j]/255.
 
-    #display_img_with_keypoints(new_img, [], False)
+    
+    display_img_with_keypoints(new_img, [], False)
 
 
-
+    """
     #print("tform", tform.params)
 
     matrix_H = H # tform.params 
@@ -176,7 +205,7 @@ def run():
 
     plt.tight_layout()
     plt.show()
-
+    """
 
     #display_img_with_keypoints(im_out, [], has_angle=False)
 
@@ -187,7 +216,7 @@ def display_img_with_keypoints(img, keypoints, has_angle):
     ax.set_aspect('equal')
 
     # Show the image
-    ax.imshow(img, cmap=plt.cm.gray)
+    ax.imshow(img)#, cmap=plt.cm.gray)
 
     # Now, loop through coord arrays, and create a circle at each x,y pair
     for keypoint in keypoints:
