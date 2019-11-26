@@ -53,9 +53,9 @@ def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, reso
         if (x, y) not in check_val:
             keypoints_filtered.append((x, y, s))
 
-    print("cnt_removed_contrast", cnt_removed_contrast)
-    print("cnt_removed_edge", cnt_removed_edge)
-    print("cnt_candidates", cnt_candidates)
+    print("Points faible contraste éliminés: ", cnt_removed_contrast)
+    print("Points d'arêtes éliminés: ", cnt_removed_edge)
+    print("Extremas détectés: ", cnt_candidates)
 
     keypoints_m_and_theta = []
     for keypoint in keypoints_filtered:

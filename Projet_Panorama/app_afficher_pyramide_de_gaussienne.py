@@ -5,12 +5,12 @@ from difference_de_gaussiennes import difference_de_gaussiennes
 def run():
     print("Project Pano is running Afficher pyramide de gaussienne.")
     
-    img = cv2.imread("./images/lena_claire.jpg", cv2.IMREAD_COLOR).astype("float32")
+    img = cv2.imread("./images/droite.jpg", cv2.IMREAD_COLOR).astype("float32")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 
     dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img, s=3, nb_octave=2)
 
-    octave = 1
+    octave = 0
 
     fig = plt.figure(figsize=(12,8))
     for i in range(1, 6+1):
