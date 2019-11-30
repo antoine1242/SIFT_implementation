@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
-from descriptionPointsCles import descriptionPointsCles
-from detectionPointsCles import detectionPointsCles, isExtremum, gaussian_filter
+from description_points_cles import description_points_cles
+from detectionPointsCles import detectionPointsCles, isExtremum
+from gaussian_filter import gaussian_filter
 from matching import distance_inter_points, get_k_lowest
 from homographie import calcul_matrice_H_avec_eig
 import cv2
@@ -40,7 +41,7 @@ def run():
     keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
     print("len(keypoints1)", len(keypoints1))
 
-    keypoints_descriptors1 = descriptionPointsCles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     print("Calculs Image 2")
     dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img2, 3, 2)
@@ -48,7 +49,7 @@ def run():
     keypoints2 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
     print("len(keypoints2)", len(keypoints2))
 
-    keypoints_descriptors2 = descriptionPointsCles(keypoints2, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints_descriptors2 = description_points_cles(keypoints2, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     print("Matrice de distance")
     distance_matrix = distance_inter_points(keypoints_descriptors1, keypoints_descriptors2)

@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
-from descriptionPointsCles import descriptionPointsCles
+from description_points_cles import description_points_cles
 from detectionPointsCles import detectionPointsCles, isExtremum
 from matching import distance_inter_points
 from matching import get_k_lowest
@@ -11,7 +11,7 @@ from skimage.io import imread
 from skimage.color import rgb2gray
 from matplotlib.patches import Circle, Arrow
 import math 
-from detectionPointsCles import gaussian_filter
+from gaussian_filter import gaussian_filter
 from scipy.ndimage.filters import convolve
 
 def run():
@@ -31,7 +31,7 @@ def run():
 
     keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
-    keypoints_descriptors1 = descriptionPointsCles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     display_img_with_keypoints(img_color1, keypoints1)
     

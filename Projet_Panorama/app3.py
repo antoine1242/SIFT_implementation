@@ -2,8 +2,9 @@ import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
-from descriptionPointsCles import descriptionPointsCles
-from detectionPointsCles import detectionPointsCles, isExtremum, gaussian_filter
+from description_points_cles import description_points_cles
+from detectionPointsCles import detectionPointsCles, isExtremum
+from gaussian_filter import gaussian_filter
 from matching import distance_inter_points, get_k_lowest
 from homographie import calcul_matrice_H_avec_eig, calcul_matrice_H_avec_svd
 import cv2

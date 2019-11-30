@@ -3,7 +3,8 @@ import matplotlib.pyplot as plt
 from skimage.io import imread
 from skimage.color import rgb2gray
 from difference_de_gaussiennes import difference_de_gaussiennes
-from detectionPointsCles import detectionPointsCles, isExtremum, gaussian_filter
+from detectionPointsCles import detectionPointsCles, isExtremum
+from gaussian_filter import gaussian_filter
 
 def run():
     print("Project Pano is running - Compteur points clés.")

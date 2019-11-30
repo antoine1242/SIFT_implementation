@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-
+from gaussian_filter import gaussian_filter
 # TODO: resolution_octave ajuster position keypoint dans l'image selon la résolution de l'image à l'octave donnée.
 
 def detectionPointsCles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):

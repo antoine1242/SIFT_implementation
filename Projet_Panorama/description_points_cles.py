@@ -1,8 +1,8 @@
 import numpy as np
-from detectionPointsCles import gaussian_filter
+from gaussian_filter import gaussian_filter
 import os
 
-def descriptionPointsCles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas):
+def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Description des points cles")
 
     keypoints_descriptors = []
