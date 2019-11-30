@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from skimage.io import imread
 from skimage.color import rgb2gray
 from difference_de_gaussiennes import difference_de_gaussiennes
-from detectionPointsCles import detectionPointsCles, isExtremum
+from detection_points_cles import detection_points_cles, isExtremum
 from gaussian_filter import gaussian_filter
 
 def run():
@@ -16,11 +16,11 @@ def run():
 
     # Octave 1
     print("Octave 1 image gauche")
-    detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    detection_points_cles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     # Octave 2
     print("Octave 2 image gauche")
-    detectionPointsCles(dogs[1], sigmas[1], 0.03, 10, 0, gaussian_filtered_images[1], gaussian_filtered_images_sigmas[1])
+    detection_points_cles(dogs[1], sigmas[1], 0.03, 10, 0, gaussian_filtered_images[1], gaussian_filtered_images_sigmas[1])
 
 
 
@@ -31,10 +31,10 @@ def run():
 
     # Octave 1
     print("Octave 1 image droite")
-    detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    detection_points_cles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     # Octave 2
     print("Octave 2 image droite")
-    detectionPointsCles(dogs[1], sigmas[1], 0.03, 10, 0, gaussian_filtered_images[1], gaussian_filtered_images_sigmas[1])
+    detection_points_cles(dogs[1], sigmas[1], 0.03, 10, 0, gaussian_filtered_images[1], gaussian_filtered_images_sigmas[1])
 
 run()

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 from description_points_cles import description_points_cles
-from detectionPointsCles import detectionPointsCles, isExtremum
+from detection_points_cles import detection_points_cles, isExtremum
 from matching import distance_inter_points
 from matching import get_k_lowest
 import cv2
@@ -29,7 +29,7 @@ def run():
     # for dog in dogs:
     #    print("dogs", dogs)
 
-    keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints1 = detection_points_cles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
     keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 

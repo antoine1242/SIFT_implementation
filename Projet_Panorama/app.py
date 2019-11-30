@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 from description_points_cles import description_points_cles
-from detectionPointsCles import detectionPointsCles, isExtremum
+from detection_points_cles import detection_points_cles, isExtremum
 from gaussian_filter import gaussian_filter
 from matching import distance_inter_points, get_k_lowest
 from homographie import calcul_matrice_H_avec_eig
@@ -38,7 +38,7 @@ def run():
     print("Calculs Image 1")
     dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img1, 3, 2)
 
-    keypoints1 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints1 = detection_points_cles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
     print("len(keypoints1)", len(keypoints1))
 
     keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
@@ -46,7 +46,7 @@ def run():
     print("Calculs Image 2")
     dogs, sigmas, gaussian_filtered_images, gaussian_filtered_images_sigmas = difference_de_gaussiennes(img2, 3, 2)
 
-    keypoints2 = detectionPointsCles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
+    keypoints2 = detection_points_cles(dogs[0], sigmas[0], 0.03, 10, 0, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
     print("len(keypoints2)", len(keypoints2))
 
     keypoints_descriptors2 = description_points_cles(keypoints2, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
