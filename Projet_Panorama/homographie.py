@@ -1,5 +1,5 @@
 import numpy as np
-import time
+import timeit
 
 def obtenir_matrice_A(keypoints_matched1, keypoints_matched2):
     matrix_A = []
@@ -21,17 +21,20 @@ def obtenir_matrice_A(keypoints_matched1, keypoints_matched2):
 
 def calcul_matrice_H_avec_eig(keypoints_matched1, keypoints_matched2, verbose=False):
     matrix_A = obtenir_matrice_A(keypoints_matched1, keypoints_matched2)
-    # (A.T)A
-    matrix_A_quadratic = np.matmul((matrix_A.transpose()), matrix_A)
+
 
     if verbose:
-        start_time = time.time()
+        start_time = timeit.default_timer()
 
+    # (A.T)A
+    matrix_A_quadratic = np.matmul((matrix_A.transpose()), matrix_A)
+    
     # Décomposition en valeurs propres
     valeurs_propres, vecteurs_propres = np.linalg.eig(matrix_A_quadratic)
 
     if verbose:
-        print("--- np.linalg.eig in %s seconds ---" % (time.time() - start_time))
+        time_ = timeit.default_timer() - start_time
+        print("--- np.linalg.eig in " + str(time_) + " seconds ---")
 
     idx_smallest_eigenvalue = np.argmin(valeurs_propres)
 
@@ -48,13 +51,14 @@ def calcul_matrice_H_avec_svd(keypoints_matched1, keypoints_matched2, verbose=Fa
     matrix_A = obtenir_matrice_A(keypoints_matched1, keypoints_matched2)
 
     if verbose:
-        start_time = time.time()
+        start_time = timeit.default_timer()
 
     # SVD
     U, S, VT = np.linalg.svd(matrix_A)
 
     if verbose:        
-        print("--- np.linalg.svd in %s seconds ---" % (time.time() - start_time))
+        time_ = timeit.default_timer() - start_time
+        print("--- np.linalg.svd in " + str(time_) + " seconds ---")
 
 
     H_flatten_svd = VT[-1]

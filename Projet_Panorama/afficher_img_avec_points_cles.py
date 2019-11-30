@@ -1,22 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from difference_de_gaussiennes import difference_de_gaussiennes
-from description_points_cles import description_points_cles
-from detection_points_cles import detection_points_cles
-from gaussian_filter import gaussian_filter
-from matching import distance_inter_points, get_k_lowest
-from homographie import calcul_matrice_H_avec_eig
-import cv2
-from skimage.io import imread
-from skimage.color import rgb2gray
 from matplotlib.patches import Circle, Arrow
 import math 
-from skimage.transform import warp
-
-
-from skimage import data
-from skimage import transform as tf
-
 
 def afficher_img_avec_points_cles(img, keypoints, has_angle):
     # Create a figure. Equal aspect so circles look circular
