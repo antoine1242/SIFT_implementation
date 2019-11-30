@@ -16,7 +16,7 @@ from scipy.ndimage.filters import convolve
 from afficher_img_avec_points_cles import afficher_img_avec_points_cles
 
 def run():
-    print("Project Pano is running App 2!")
+    print("Projet Pano is running App 2!")
     
     img_color1 = imread("./images/droite.jpg")
     img1 = rgb2gray(img_color1)

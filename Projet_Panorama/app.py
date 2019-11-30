@@ -2,7 +2,7 @@ from skimage.io import imread
 from obtenir_panorama import obtenir_panorama
 
 def run():
-    print("Project Pano is running!")
+    print("Projet Pano is running!")
     
     # Importer Images
     img_color1 = imread("./images/gauche.jpg")

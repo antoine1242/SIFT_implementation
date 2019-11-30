@@ -5,7 +5,7 @@ from description_points_cles import description_points_cles
 from detection_points_cles import detection_points_cles
 from gaussian_filter import gaussian_filter
 from matching import distance_inter_points, get_k_lowest
-from homographie import calcul_matrice_H_avec_eig
+from homographie import calcul_matrice_H_avec_eig, calcul_matrice_H_avec_svd
 from skimage.color import rgb2gray
 from afficher_img_avec_points_cles import afficher_img_avec_points_cles
 
@@ -103,13 +103,6 @@ def obtenir_panorama(img_color1, img_color2):
         keypoints_matched1.append((keypoints1[idx_image1][0], keypoints1[idx_image1][1]))
         keypoints_matched2.append((keypoints2[idx_image2][0], keypoints2[idx_image2][1]))
 
-    print("keypoints_matched1: ", keypoints_matched1)
-    print("len(keypoints_matched1): ", len(keypoints_matched1))
-    print("keypoints_matched2: ", keypoints_matched2)
-    print("len(keypoints_matched2): ", len(keypoints_matched2))
-
-    print("AFTER REMOVE DUPLICATES")
-
     # Rejection des points clés matched de même coordonnée
     coordinates_set = set()
     kept_indexes = []
@@ -129,29 +122,11 @@ def obtenir_panorama(img_color1, img_color2):
     keypoints_matched1 = keypoints_no_duplicates1
     keypoints_matched2 = keypoints_no_duplicates2
 
-    print("keypoints_matched1: ", keypoints_matched1)
-    print("len(keypoints_matched1): ", len(keypoints_matched1))
-    print("keypoints_matched2: ", keypoints_matched2)
-    print("len(keypoints_matched2): ", len(keypoints_matched2))
 
-    #  -------------------------------------------------------------------------------------------------------------------------------------
+    ##### 3. Reconstitution du panorama #####
 
-    keypoints_matched1 = [(444.0, 766.0), (503.0, 749.0), (494.0, 619.0), (229.0, 638.0), (437.0, 760.0), (277.0, 810.0), (355.0, 818.0), (398.0, 924.0), (109.0, 988.0), (368.0, 908.0), (177.0, 749.0), (363.0, 624.0), (440.0, 645.0)]
-    keypoints_matched2 = [(447.0, 164.0), (507.0, 147.0), (499.0, 15.0), (230.0, 32.0), (440.0, 157.0), (277.0, 207.0), (356.0, 216.0), (399.0, 323.0), (105.0, 386.0), (369.0, 307.0), (176.0, 144.0), (366.0, 19.0), (444.0, 41.0)]
-
-    #afficher_img_avec_points_cles(img_color1, keypoints_matched1, has_angle=False)
-    #afficher_img_avec_points_cles(img_color2, keypoints_matched2, has_angle=False)
-
-    # 
-    H, _ = calcul_matrice_H_avec_eig(keypoints_matched1, keypoints_matched2)
+    H, _ = calcul_matrice_H_avec_svd(keypoints_matched1, keypoints_matched2)
     
-    print("H", H)
-
-    ''' 
-    The calculated homography can be used to warp 
-    the source image to destination. Size is the 
-    size (width,height) of im_dst
-    '''
     H_inv = np.linalg.inv(H)
     H_inv = H_inv / H_inv[2][2]
     print()

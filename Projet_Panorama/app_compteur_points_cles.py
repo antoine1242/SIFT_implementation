@@ -7,7 +7,7 @@ from detection_points_cles import detection_points_cles
 from gaussian_filter import gaussian_filter
 
 def run():
-    print("Project Pano is running - Compteur points clés.")
+    print("Projet Pano is running - Compteur points clés.")
    
     img = imread("./images/gauche.jpg")
     img = rgb2gray(img)

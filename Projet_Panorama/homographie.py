@@ -37,15 +37,9 @@ def calcul_matrice_H_avec_eig(keypoints_matched1, keypoints_matched2, verbose=Fa
 
     H_flatten = vecteurs_propres[:, idx_smallest_eigenvalue]
 
-    H_flatten = H_flatten / H_flatten[-1]
+    H_norm = H_flatten / H_flatten[-1]
     
-    H_norm = np.reshape(H_flatten, (3,3))
-
-    # TODO on doit Norm ou / H_flatten[-1] ?
-    # if np.linalg.norm(H_norm) != 1.:
-    #     H_norm /= np.linalg.norm(H_norm)
-
-    
+    H_norm = np.reshape(H_norm, (3,3))  
 
     return H_norm, H_flatten
 
@@ -63,13 +57,13 @@ def calcul_matrice_H_avec_svd(keypoints_matched1, keypoints_matched2, verbose=Fa
         print("--- np.linalg.svd in %s seconds ---" % (time.time() - start_time))
 
 
-    H_flatten_svd = VT.transpose()[-1]
+    H_flatten_svd = VT[-1]
     H_flatten_norm_svd = H_flatten_svd / H_flatten_svd[-1]
+
+
     H_norm_svd = np.reshape(H_flatten_norm_svd, (3,3))
 
-    H_flatten = VT[-1]
-
-    return H_norm_svd, H_flatten
+    return H_norm_svd, H_flatten_svd
 
 
 # Comparer dernier vecteur singulier vs vecteur propre A.T*A 

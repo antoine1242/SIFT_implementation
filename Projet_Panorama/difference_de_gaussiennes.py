@@ -19,14 +19,22 @@ def difference_de_gaussiennes(image_initiale, s: int, nb_octave: int):
 
     # Octave 1 
     for image in range(nb_image):
+        # TODO revoir:
+        # On est supposé faire un traitement différent pour premier octave
+        # mais les points clés match ne fonctionnent pas....
+        
         # Traitement différent pour première image  de la première octave
         # afin de considérer le flou intrinsèque de 1
-        if image == 0:
-            sigma_img = np.sqrt(sigma_init**2 - 1)
-            gaussian_filtered_images_sigmas[0].append(sigma_init)
-        else:
-            sigma_img = sigma_init * (k**image)
-            gaussian_filtered_images_sigmas[0].append(sigma_img)
+        # if image == 0:
+        #     sigma_img = np.sqrt(sigma_init**2 - 1)
+        #     gaussian_filtered_images_sigmas[0].append(sigma_init)
+        # else:
+        #     sigma_img = sigma_init * (k**image)
+        #     gaussian_filtered_images_sigmas[0].append(sigma_img)
+
+        sigma_img = sigma_init * (k**image)
+        gaussian_filtered_images_sigmas[0].append(sigma_img)
+
 
         kernel = gaussian_filter(sigma_img)
         result = convolve(image_initiale_norm, kernel)

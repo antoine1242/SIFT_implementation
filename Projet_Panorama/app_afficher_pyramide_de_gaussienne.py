@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 
 def run():
-    print("Project Pano is running Afficher pyramide de gaussienne.")
+    print("Projet Pano is running Afficher pyramide de gaussienne.")
     
     img = cv2.imread("./images/droite.jpg", cv2.IMREAD_COLOR).astype("float32")
     img = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
