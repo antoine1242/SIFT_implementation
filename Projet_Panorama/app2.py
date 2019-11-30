@@ -13,6 +13,7 @@ from matplotlib.patches import Circle, Arrow
 import math 
 from gaussian_filter import gaussian_filter
 from scipy.ndimage.filters import convolve
+from afficher_img_avec_points_cles import afficher_img_avec_points_cles
 
 def run():
     print("Project Pano is running App 2!")
@@ -33,34 +34,5 @@ def run():
 
     keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
-    display_img_with_keypoints(img_color1, keypoints1)
+    afficher_img_avec_points_cles(img_color1, keypoints1)
     
-
-
-def display_img_with_keypoints(img, keypoints):
-    # Create a figure. Equal aspect so circles look circular
-    fig,ax = plt.subplots(1)
-    ax.set_aspect('equal')
-
-    # Show the image
-    ax.imshow(img) # , cmap='Greys'
-
-    # Now, loop through coord arrays, and create a circle at each x,y pair
-    for keypoint in keypoints:
-        x = keypoint[0]
-        y = keypoint[1]
-        r = 5 * keypoint[2]
-        angle = math.radians(keypoint[3])
-        dx = r * np.cos(angle)
-        dy = r * np.sin(angle)
-
-        line = Arrow(y, x, dx, dy, width=2.0)
-        circ = Circle((y,x), r, fill=False)
-        ax.add_patch(circ)
-        ax.add_patch(line)
-
-    # Show the image
-    plt.show()
-
-run()
-
