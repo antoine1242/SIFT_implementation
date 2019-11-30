@@ -24,7 +24,7 @@ def obtenir_panorama(img_color1, img_color2):
     RESOLUTION_OCTAVE = 0
 
 
-    ##### Obtenir descripteurs des points clés pour les deux images #####
+    ##### 1. Obtenir descripteurs des points clés pour les deux images #####
 
     print("Calculs pour Image 1")
     # Obtenir pyramide de gaussienne pour Image 1
@@ -75,13 +75,24 @@ def obtenir_panorama(img_color1, img_color2):
 
 
 
-    ##### TODO#####
+    ##### 2. Trouver points clés de l'image 1 qui concordent avec ceux de l'image 2 #####
 
-    print("Matrice de distance")
-    distance_matrix = distance_inter_points(keypoints_descriptors1, keypoints_descriptors2)
+    print("Calcul de la matrice de distances")   
+    # Obtenir matrice de distances    
+    distance_matrix = distance_inter_points(
+                        descriptors_image1=keypoints_descriptors1, 
+                        descriptors_image2=keypoints_descriptors2)
 
-    k_lowest = get_k_lowest(distance_matrix, 2*10)
 
+    print("Calcul de l'index des k plus petites distances")
+    # Obtenir les k points avec la plus petite distance
+    k_lowest = get_k_lowest(
+                descriptors_distance_matrix=distance_matrix, 
+                k=20)
+
+
+    # Obtenir points clés qui match pour l'image 1 et l'image 2 
+    # à partir de l'index recueilli dans k_lowest
     keypoints_matched1 = []
     keypoints_matched2 = []
 
@@ -98,14 +109,15 @@ def obtenir_panorama(img_color1, img_color2):
     print("len(keypoints_matched2): ", len(keypoints_matched2))
 
     print("AFTER REMOVE DUPLICATES")
-    coordinates_dict = {}
+
+    # Rejection des points clés matched de même coordonnée
+    coordinates_set = set()
     kept_indexes = []
-    for i in range(len(keypoints_matched1)):
-        point = str(keypoints_matched1[i][0]) + "," + str(keypoints_matched1[i][1])
-        
-        if point not in coordinates_dict:
+    for i in range(len(keypoints_matched1)):    
+        point = (keypoints_matched1[i][0], keypoints_matched1[i][1])    
+        if point not in coordinates_set:
             kept_indexes.append(i)
-            coordinates_dict[point] = 1
+            coordinates_set.add(point)
 
     keypoints_no_duplicates1 = []
     keypoints_no_duplicates2 = []

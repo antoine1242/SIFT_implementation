@@ -2,8 +2,6 @@ import numpy as np
 from scipy.spatial import distance_matrix
 
 def distance_inter_points(descriptors_image1, descriptors_image2):
-    print("Calcul de la matrice de distance")
-
     descriptors1 = []
     for i in range(len(descriptors_image1)):
         descriptors1.append(descriptors_image1[i][2:])
@@ -14,11 +12,10 @@ def distance_inter_points(descriptors_image1, descriptors_image2):
 
     return distance_matrix(descriptors1, descriptors2)
 
-def get_k_lowest(descriptors_distance_matrix, k):
-    print("Calcul de l'index des k plus petites distances")
-    
+def get_k_lowest(descriptors_distance_matrix, k):   
     # Liste comportant les k point avec la plus petite distance en ordre décroissant
     # Contient: Tuples représentant (valeur, index i, index j)
+
     k_lowest = []
     
     m = len(descriptors_distance_matrix)
@@ -31,7 +28,6 @@ def get_k_lowest(descriptors_distance_matrix, k):
         n = len(descriptors_distance_matrix[0])
         matrice_has_been_transposed = True
 
-    # Parcourir matrice sytmérique (évite d'avoir des dupliqués)
     for i in range(0, m):
         for j in range(i + 1, n):
             if not matrice_has_been_transposed:
@@ -41,6 +37,7 @@ def get_k_lowest(descriptors_distance_matrix, k):
 
             if len(k_lowest) < k:
                 k_lowest.append(candidate)
+
             # Si la distance du nouveau point candidat est plus petite que la distance maximale dans les k_lowest
             elif candidate[0] < k_lowest[0][0]:
                 # On enlève valeur max
@@ -51,15 +48,3 @@ def get_k_lowest(descriptors_distance_matrix, k):
                 k_lowest.sort(reverse = True)
 
     return k_lowest
-
-
-# Pour tester
-# d_m = np.array([[ 1.,  2., 3.],
-#                 [ 4.,  5., 6.],
-#                 [ 7.,  8., 9.],
-#                 [ 10.,  11., 12.]
-                
-#                 ])
-
-# print(get_k_lowest(d_m, 1))
-
