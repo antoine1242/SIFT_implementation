@@ -12,6 +12,9 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
     region_length = 4
     window_length = region_length * nb_regions
     
+    # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
+    circular_gaussian_window = gaussian_filter(window_length / 6)
+
     for keypoint in keypoints:
         x_kp = keypoint[0]
         y_kp = keypoint[1]
@@ -20,9 +23,6 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         # On initialise le descripteur avec les coordonnées x,y du point clé
         keypoint_descriptor = [x_kp, y_kp]
 
-        # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
-        circular_gaussian_window = gaussian_filter(window_length / 6)
-
         # Sélection de l'image correspondant au sigma du point clé
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]
@@ -30,9 +30,11 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         # Parcours de la zone 16x16 autour du point clé pour calculer le gradient de chaque point
         range_zone = int(window_length / 2)
 
-        # Besoin d'une liste pcq numpy array veut pas remplacer les ints par des tuples
+        # Initialisation de la matrice de grandients
+        # Note: Besoin d'une liste pcq numpy array veut pas remplacer les ints par des tuples
         gradients_matrix = x = [[0 for i in range(window_length)] for j in range(window_length)]
         
+        # Calcul des grandients dans la matrice de grandients
         for dx_zone in range(-range_zone, range_zone):
             for dy_zone in range(-range_zone, range_zone):
                 x = int(x_kp + dx_zone)
@@ -42,11 +44,13 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
                 if x < 0 or x > L.shape[0] - 1 or y < 0 or y > L.shape[1] - 1: 
                     continue
 
+                # Calcul du gradient (norme + orientation)
                 dx = L[min(L.shape[0]-1, x+1)][y] - L[max(x-1, 0)][y]
                 dy = L[x][min(L.shape[1]-1, y+1)] - L[x][max(y-1, 0)]
                 m = np.sqrt(dx**2 + dy**2)
                 theta = (np.arctan2(dy, dx)) * 180/np.pi
                 
+                # Ajouter gradient à la matrice de grandients
                 gradients_matrix[dx_zone + range_zone][dy_zone + range_zone] = (m, theta)
 
         histograms = []
@@ -67,6 +71,8 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
                         # TODO circular_gaussian_window avec dx_zone ... dy_zone .. ? (Vérifier mes ajustements ci-dessous)
                         # avant : weight = circular_gaussian_window[dx_zone + range_zone][dy_zone + range_zone] * mag
                         # maintenant: 
+
+                        # On pondère le gradient avec une gaussienne centrée sur le point clé
                         x_pos_in_window = k
                         y_pos_in_window = m
     
@@ -80,11 +86,7 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
                                 
                 histograms.extend(hist)
         
-
-        # TODO j'ai ajouté normalisation avant aussi, dans l'article ce n'est pas clair s'il faut le faire
-        # avant et après le filtrage du 0.2, mais dans l'implémentation de l'article il fait norm avant et après
-
-        # TODO avant c'était: s = sum(histograms), mais je pense qu<on veut la norme et non la somme.
+        # Normalisation du vecteur de features
         norm = np.linalg.norm(histograms)
         normalized_vector_1 = [float(i)/norm for i in histograms]
 
