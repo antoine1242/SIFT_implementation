@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from skimage.io import imread
 from skimage.color import rgb2gray
 from difference_de_gaussiennes import difference_de_gaussiennes
-from detection_points_cles import detection_points_cles, isExtremum
+from detection_points_cles import detection_points_cles
 from gaussian_filter import gaussian_filter
 
 def run():

@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 from description_points_cles import description_points_cles
-from detection_points_cles import detection_points_cles, isExtremum
+from detection_points_cles import detection_points_cles
 from gaussian_filter import gaussian_filter
 from matching import distance_inter_points, get_k_lowest
 from homographie import calcul_matrice_H_avec_eig, calcul_matrice_H_avec_svd

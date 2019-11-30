@@ -17,14 +17,14 @@ def run():
         axi = fig.add_subplot(2, 3, i)
         axi.title.set_text(str(gaussian_filtered_images_sigmas[octave][i-1]))
         plt.imshow(gaussian_filtered_images[octave][i-1], cmap=plt.cm.gray)
-    plt.savefig("./images_rapport/pyramide_de_gaussiennes_ocatave_" + str(octave) + ".png")
+    plt.savefig("./images_rapport/pyramide_de_gaussiennes_octave_" + str(octave) + ".png")
     plt.show()
 
     fig = plt.figure(figsize=(12,8))
     for i in range(1, 6):
         fig.add_subplot(2, 3, i)
         plt.imshow(dogs[octave][i-1], cmap=plt.cm.gray)
-    plt.savefig("./images_rapport/difference_de_gaussiennes_ocatave_" + str(octave) + ".png")
+    plt.savefig("./images_rapport/difference_de_gaussiennes_octave_" + str(octave) + ".png")
     plt.show()
 
 
