@@ -156,13 +156,16 @@ def run():
     new_img = np.zeros((int(shape_new_img[0]), int(shape_new_img[1]), 3), dtype=np.float32)
     for i in range(len(img2)):
         for j in range(len(img2[0])):
-            coor_temp = np.array([i, j, 1])
-            new_coord = H_inv@coor_temp
-            # Si coordonnée est à l'extérieur de l'image on ne la considère pas
+            old_coord = np.array([i, j, 1])
+            new_coord = H_inv@old_coord
+
             new_x = int(new_coord[0])
             new_y = int(new_coord[1])
+
+            # Si coordonnée est à l'extérieur de l'image on ne la considère pas
             if new_x < 0 or new_x > shape_new_img[0] - 1 or new_y < 0 or new_y > shape_new_img[1] - 1: 
                 continue
+
             new_img[new_x][new_y] = img_color2[i][j]/255.
 
     
