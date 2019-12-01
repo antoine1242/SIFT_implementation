@@ -34,7 +34,7 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         # Note: Besoin d'une liste pcq numpy array veut pas remplacer les ints par des tuples
         gradients_matrix = x = [[0 for i in range(window_length)] for j in range(window_length)]
         
-        # Calcul des grandients dans la matrice de grandients
+        # Calcul des gradients dans la matrice de gradients
         for dx_zone in range(-range_zone, range_zone):
             for dy_zone in range(-range_zone, range_zone):
                 x = int(x_kp + dx_zone)
@@ -105,4 +105,15 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         keypoints_descriptors.append(keypoint_descriptor)
     
     return np.array(keypoints_descriptors)
-  
+
+def rotate(image, angle, center = None, scale = 1.0):
+    (h, w) = image.shape[:2]
+
+    if center is None:
+        center = (w / 2, h / 2)
+
+    # Perform the rotation
+    M = cv2.getRotationMatrix2D(center, angle, scale)
+    rotated = cv2.warpAffine(image, M, (w, h))
+
+    return rotated
