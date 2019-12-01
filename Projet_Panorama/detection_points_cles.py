@@ -138,7 +138,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
     for keypoint in keypoints_m_and_theta:
         adjusted_keypoints.append((keypoint[0]*(2**resolution_octave), keypoint[1]*(2**resolution_octave), keypoint[2], keypoint[3]))
 
-    return np.array(keypoints_m_and_theta)
+    return np.array(adjusted_keypoints)
 
 
 # Permet de trouver angle theta par interpolation d'histogramme

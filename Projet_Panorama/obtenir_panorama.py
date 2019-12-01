@@ -24,7 +24,6 @@ def obtenir_panorama(img_color1, img_color2):
     NB_OCTAVE = 1
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
-    RESOLUTION_OCTAVE = 0
     NB_K_LOWEST_PTS = 20
 
     #"""
