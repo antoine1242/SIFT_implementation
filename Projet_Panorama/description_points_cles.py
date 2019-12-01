@@ -28,6 +28,8 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]
         
+        L = rotate(L, keypoint[3], (x_kp, y_kp))
+
         # Parcours de la zone 16x16 autour du point clé pour calculer le gradient de chaque point
         range_zone = int(window_length / 2)
 
@@ -42,7 +44,7 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
                 y = int(y_kp + dy_zone)
 
                 # Si coordonnée est à l'extérieur de l'image on ne la considère pas
-                if x < 0 or x > L.shape[0] - 1 or y < 0 or y > L.shape[1] - 1: 
+                if x < 0 or x > L.shape[0] - 1 or y < 0 or y > L.shape[1] - 1 or L[x][y] == 0: 
                     continue
 
                 # Calcul du gradient (norme + orientation)
