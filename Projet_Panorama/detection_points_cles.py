@@ -223,7 +223,4 @@ def is_extremum(previous, current, next_, x, y):
             elif next_[i][j] <= value:
                 allSmaller = False
 
-            if allBigger or allSmaller:
-                return True 
-
-    return False
+    return allBigger or allSmaller
