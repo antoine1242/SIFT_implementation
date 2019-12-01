@@ -21,7 +21,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Initialisation des constantes
     S = 3
-    NB_OCTAVE = 2
+    NB_OCTAVE = 1
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
     RESOLUTION_OCTAVE = 0
@@ -38,69 +38,78 @@ def obtenir_panorama(img_color1, img_color2):
                                                                                     s=S, 
                                                                                     nb_octave=NB_OCTAVE)
 
-    # Obtenir points clés pour Image 1
-    keypoints1 = detection_points_cles(
-                    dog=dogs1[0], 
-                    sigma=sigmas1[0], 
-                    seuil_contraste=SEUIL_CONTRASTE, 
-                    r_courbure_principale=R_COURBURE_PRINCIPALE, 
-                    resolution_octave=RESOLUTION_OCTAVE, 
-                    gaussian_filtered_images=gaussian_filtered_images1[0], 
-                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[0])
+    # Obtenir les points clés pour Image 1
+    keypoints1 = []
+    for resolution_octave in range(NB_OCTAVE):  
+        keypoints = detection_points_cles(
+                        dog=dogs1[resolution_octave], 
+                        sigma=sigmas1[resolution_octave], 
+                        seuil_contraste=SEUIL_CONTRASTE, 
+                        r_courbure_principale=R_COURBURE_PRINCIPALE, 
+                        resolution_octave=resolution_octave, 
+                        gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
+                        gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[resolution_octave])
 
-    # Obtenir descripteurs pour points clés Image 1
-    keypoints_descriptors1 = description_points_cles(
-                                keypoints=keypoints1, 
-                                gaussian_filtered_images=gaussian_filtered_images1[0], 
-                                gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[0])
+        # Obtenir les descripteurs
+        keypoints_descriptors = description_points_cles(
+                                    keypoints=keypoints, 
+                                    gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
+                                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[resolution_octave])
 
+        keypoints1.extend(keypoints_descriptors)    
+
+    np.save("points_cles_image_gauche.npy", keypoints1)
 
     print("\nCalculs pour Image 2")
     # Obtenir pyramide de gaussienne pour Image 2
     dogs2, sigmas2, gaussian_filtered_images2, gaussian_filtered_images_sigmas2 = difference_de_gaussiennes(
-                                                                                    image_initiale=img2, 
-                                                                                    s=S, 
+                                                                                    image_initiale=img2,
+                                                                                    s=S,
                                                                                     nb_octave=NB_OCTAVE)
 
     # Obtenir points clés pour Image 2
-    keypoints2 = detection_points_cles(
-                    dog=dogs2[0], 
-                    sigma=sigmas2[0], 
-                    seuil_contraste=SEUIL_CONTRASTE, 
-                    r_courbure_principale=R_COURBURE_PRINCIPALE, 
-                    resolution_octave=RESOLUTION_OCTAVE, 
-                    gaussian_filtered_images=gaussian_filtered_images2[0], 
-                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[0])
+    keypoints2 = []
+    for resolution_octave in range(NB_OCTAVE):
+        keypoints = detection_points_cles(
+                        dog=dogs2[resolution_octave],
+                        sigma=sigmas2[resolution_octave],
+                        seuil_contraste=SEUIL_CONTRASTE,
+                        r_courbure_principale=R_COURBURE_PRINCIPALE,
+                        resolution_octave=RESOLUTION_OCTAVE,
+                        gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
+                        gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
 
-    # Obtenir descripteurs pour points clés Image 2
-    keypoints_descriptors2 = description_points_cles(
-                                keypoints=keypoints2, 
-                                gaussian_filtered_images=gaussian_filtered_images2[0], 
-                                gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[0])
+        # Obtenir descripteurs pour points clés Image 2
+        keypoints_descriptors = description_points_cles(
+                                    keypoints=keypoints, 
+                                    gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
+                                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
 
+        keypoints2.extend(keypoints_descriptors)
 
+    np.save("points_cles_image_droite.npy", keypoints2)
 
     ##### 2. Trouver points clés de l'image 1 qui concordent avec ceux de l'image 2 #####
 
-    print("\nCalcul de la matrice de distances")   
-    # Obtenir matrice de distances    
+    print("\nCalcul de la matrice de distances")
+    # Obtenir matrice de distances
     distance_matrix = distance_inter_points(
-                        descriptors_image1=keypoints_descriptors1, 
-                        descriptors_image2=keypoints_descriptors2)
+                        descriptors_image1=keypoints1,
+                        descriptors_image2=keypoints2)
 
 
     print("\nCalcul de l'index des k plus petites distances")
     # Obtenir les k points avec la plus petite distance
     k_lowest = get_k_lowest(
-                descriptors_distance_matrix=distance_matrix, 
+                descriptors_distance_matrix=distance_matrix,
                 k=NB_K_LOWEST_PTS)
 
 
-    # Obtenir points clés qui match pour l'image 1 et l'image 2 
+    # Obtenir points clés qui match pour l'image 1 et l'image 2
     # à partir de l'index recueilli dans k_lowest
     keypoints_matched1, keypoints_matched2 = obtenir_points_clés_match(
                                                 k_lowest=k_lowest,
-                                                keypoints1=keypoints1, 
+                                                keypoints1=keypoints1,
                                                 keypoints2=keypoints2)
 
     #"""

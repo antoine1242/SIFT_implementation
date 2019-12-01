@@ -34,5 +34,6 @@ def run():
 
     keypoints_descriptors1 = description_points_cles(keypoints1, gaussian_filtered_images[0], gaussian_filtered_images_sigmas[0])
 
-    afficher_img_avec_points_cles(img_color1, keypoints1)
+    afficher_img_avec_points_cles(img_color1, keypoints_descriptors1, False)
     
+run()

@@ -4,7 +4,7 @@ from gaussian_filter import gaussian_filter
 # TODO: resolution_octave ajuster position keypoint dans l'image selon la résolution de l'image à l'octave donnée.
 
 def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
-    print("Detection des points cles")
+    print("Detection des points cles - Octave " + str(resolution_octave + 1))
     
     # Initialisation des constantes
     NB_BINS = 10
@@ -122,7 +122,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
         # Trouver à quel orientation fait partie le point clé
         max_bin = np.argmax(hist)
 
-        # Trouver angle exacte theta par interpolation avec la fonction find_angle() et ajouter le point clé à keypoints_m_and_theta
+        # Trouver angle exact theta par interpolation avec la fonction find_angle() et ajouter le point clé à keypoints_m_and_theta
         keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, max_bin, BIN_SIZE)))
 
         max_val = np.max(hist)
@@ -132,6 +132,11 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
 
             if m >= .8 * max_val:
                 keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, bin_index, BIN_SIZE)))
+
+    # Ajuster les coordonnées du point sur l'image d'origine selon la résolution de l'octave
+    adjusted_keypoints = []
+    for keypoint in keypoints_m_and_theta:
+        adjusted_keypoints.append((keypoint[0]*(2**resolution_octave), keypoint[1]*(2**resolution_octave), keypoint[2], keypoint[3]))
 
     return np.array(keypoints_m_and_theta)
 
