@@ -1,5 +1,6 @@
 import numpy as np
 from gaussian_filter import gaussian_filter
+import cv2
 import os
 
 def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas):
