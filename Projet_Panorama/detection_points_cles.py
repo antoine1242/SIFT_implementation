@@ -207,9 +207,7 @@ def is_extremum(previous, current, next_, x, y):
 
     for i in range(x-1, x+2):
         for j in range(y-1, y+2):
-            if i == x and j == y:
-                continue
-            
+                        
             if previous[i][j] >= value:
                 allBigger = False
             elif previous[i][j] <= value:
@@ -225,8 +223,7 @@ def is_extremum(previous, current, next_, x, y):
             elif next_[i][j] <= value:
                 allSmaller = False
 
-            if not allBigger and not allSmaller:
-                return False 
+            if allBigger or allSmaller:
+                return True 
 
-    return True
-
+    return False
