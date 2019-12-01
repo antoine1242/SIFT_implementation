@@ -10,13 +10,13 @@ def obtenir_points_clés_match(k_lowest, keypoints1, keypoints2):
         keypoints_matched2.append((keypoints2[idx_image2][0], keypoints2[idx_image2][1]))
 
     # Réjection des points clés matched de même coordonnée
-    coordinates_set = set()
+    coordinates_dict = {}
     kept_indexes = []
     for i in range(len(keypoints_matched1)):    
-        point = (keypoints_matched1[i][0], keypoints_matched1[i][1])    
-        if point not in coordinates_set:
+        point = str(keypoints_matched1[i][0]) + "," + str(keypoints_matched1[i][1])
+        if point not in coordinates_dict:
             kept_indexes.append(i)
-            coordinates_set.add(point)
+            coordinates_dict[point] = 1
 
     keypoints_no_duplicates1 = []
     keypoints_no_duplicates2 = []
@@ -25,4 +25,4 @@ def obtenir_points_clés_match(k_lowest, keypoints1, keypoints2):
         keypoints_no_duplicates1.append(keypoints_matched1[kept_indexes[i]])
         keypoints_no_duplicates2.append(keypoints_matched2[kept_indexes[i]])
 
-    return keypoints_matched1, keypoints_matched2
+    return keypoints_no_duplicates1, keypoints_no_duplicates2
