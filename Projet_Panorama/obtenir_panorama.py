@@ -75,7 +75,7 @@ def obtenir_panorama(img_color1, img_color2):
                         sigma=sigmas2[resolution_octave],
                         seuil_contraste=SEUIL_CONTRASTE,
                         r_courbure_principale=R_COURBURE_PRINCIPALE,
-                        resolution_octave=RESOLUTION_OCTAVE,
+                        resolution_octave=resolution_octave,
                         gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
                         gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
 
