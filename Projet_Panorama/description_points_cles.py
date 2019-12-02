@@ -3,7 +3,7 @@ from gaussian_filter import gaussian_filter
 import cv2
 import os
 
-def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filtered_images_sigmas):
+def description_points_cles(keypoints, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Description des points cles")
 
     keypoints_descriptors = []
@@ -16,21 +16,22 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
     # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
     circular_gaussian_window = gaussian_filter(window_length / 6)
 
+
     for keypoint in keypoints:
-        x_kp = keypoint[0]
-        y_kp = keypoint[1]
+        x_kp = int(round(keypoint[0]/(2**resolution_octave)))
+        y_kp = int(round(keypoint[1]/(2**resolution_octave)))
         sigma = keypoint[2]
         
         # On initialise le descripteur avec les coordonnées x,y du point clé
-        keypoint_descriptor = [x_kp, y_kp]
+        keypoint_descriptor = [keypoint[0], keypoint[1]]
 
         # Sélection de l'image correspondant au sigma du point clé
   
 
         # TODO : Revoir quelle image on doit prendre 
-        max_sigma_octave_1 = gaussian_filtered_images_sigmas[len(gaussian_filtered_images_sigmas) - 1]
-        if sigma > max_sigma_octave_1:
-            sigma = max_sigma_octave_1
+        # max_sigma_octave_1 = gaussian_filtered_images_sigmas[len(gaussian_filtered_images_sigmas) - 1]
+        # if sigma > max_sigma_octave_1:
+        #     sigma = max_sigma_octave_1
 
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]

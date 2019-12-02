@@ -22,7 +22,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Initialisation des constantes
     S = 3
-    NB_OCTAVE = 1
+    NB_OCTAVE = 2
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
     NB_K_LOWEST_PTS = 10
@@ -40,6 +40,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Obtenir les points clés pour Image 1
     keypoints1 = []
+    keypoints_descriptors1  = []
     for resolution_octave in range(NB_OCTAVE):  
         keypoints = detection_points_cles(
                         dog=dogs1[resolution_octave], 
@@ -52,11 +53,14 @@ def obtenir_panorama(img_color1, img_color2):
 
         keypoints1.extend(keypoints)
 
-    # Obtenir les descripteurs
-    keypoints_descriptors1 = description_points_cles(
-                                keypoints=keypoints1, 
-                                gaussian_filtered_images=gaussian_filtered_images1[0], 
-                                gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[0])
+        # Obtenir les descripteurs
+        keypoints_descriptors = description_points_cles(
+                                    keypoints=keypoints, 
+                                    resolution_octave=resolution_octave, 
+                                    gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
+                                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[resolution_octave])
+
+        keypoints_descriptors1.extend(keypoints_descriptors)
 
     print("len keypoints1 ", len(keypoints1))
     print("len keypoints_descriptors1 ", len(keypoints_descriptors1))
@@ -74,6 +78,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Obtenir points clés pour Image 2
     keypoints2 = []
+    keypoints_descriptors2  = []
     for resolution_octave in range(NB_OCTAVE):
         keypoints = detection_points_cles(
                         dog=dogs2[resolution_octave],
@@ -86,11 +91,14 @@ def obtenir_panorama(img_color1, img_color2):
 
         keypoints2.extend(keypoints)
 
-    # Obtenir descripteurs pour points clés Image 2
-    keypoints_descriptors2 = description_points_cles(
-                                keypoints=keypoints2, 
-                                gaussian_filtered_images=gaussian_filtered_images2[0],
-                                gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[0])
+        # Obtenir descripteurs pour points clés Image 2
+        keypoints_descriptors = description_points_cles(
+                                    keypoints=keypoints,
+                                    resolution_octave=resolution_octave, 
+                                    gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
+                                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
+        
+        keypoints_descriptors2.extend(keypoints_descriptors)
 
     print("len keypoints2 ", len(keypoints2))
     print("len keypoints_descriptors2 ", len(keypoints_descriptors2))
