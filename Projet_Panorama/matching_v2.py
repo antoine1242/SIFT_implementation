@@ -20,31 +20,39 @@ def get_k_lowest(descriptors_distance_matrix, k):
     
     m = len(descriptors_distance_matrix)
     n = len(descriptors_distance_matrix[0])
-    matrice_has_been_transposed = False
-    
-    if m > n:        
-        descriptors_distance_matrix = descriptors_distance_matrix.transpose()
-        m = len(descriptors_distance_matrix)
-        n = len(descriptors_distance_matrix[0])
-        matrice_has_been_transposed = True
 
+    k_lowest_set = set()
+   
     for i in range(0, m):
-        for j in range(i + 1, n):
-            if not matrice_has_been_transposed:
-                candidate = (descriptors_distance_matrix[i][j], i, j)
-            else: 
-                candidate = (descriptors_distance_matrix[i][j], j, i)
+        for j in range(0, n):
+            candidate = (descriptors_distance_matrix[i][j], i, j)
+            candidate_coord = (i, j)
 
             if len(k_lowest) < k:
                 k_lowest.append(candidate)
+                k_lowest_set.add(candidate_coord)
+
+            # Si les coordonnée du point clé candidat on ne l'ajoute pas  
+            elif candidate_coord in k_lowest_set:
+                continue
 
             # Si la distance du nouveau point candidat est plus petite que la distance maximale dans les k_lowest
             elif candidate[0] < k_lowest[0][0]:
                 # On enlève valeur max
-                k_lowest.pop(0)
+                removed_candidate = k_lowest.pop(0)
+                # On l'enlève du set
+                if removed_candidate is not None:
+                    removed_candidate_coord = (removed_candidate[1], removed_candidate[2])
+                    k_lowest_set.remove(removed_candidate_coord)
+
                 # On ajoute nouveau point
                 k_lowest.append(candidate)
                 # On sort l'array
-                k_lowest.sort(reverse = True)
+                sorted(k_lowest, key=lambda x: x[0], reverse = True)
+                # On l'ajoute au set
+                k_lowest_set.add(candidate_coord)
+
+            
+    print(k_lowest)
 
     return k_lowest
