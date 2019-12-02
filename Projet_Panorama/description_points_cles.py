@@ -25,6 +25,13 @@ def description_points_cles(keypoints, gaussian_filtered_images, gaussian_filter
         keypoint_descriptor = [x_kp, y_kp]
 
         # Sélection de l'image correspondant au sigma du point clé
+  
+
+        # TODO : Revoir quelle image on doit prendre 
+        max_sigma_octave_1 = gaussian_filtered_images_sigmas[len(gaussian_filtered_images_sigmas) - 1]
+        if sigma > max_sigma_octave_1:
+            sigma = max_sigma_octave_1
+
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]
         

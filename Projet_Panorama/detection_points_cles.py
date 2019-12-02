@@ -62,6 +62,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
     print("Extremas détectés: ", cnt_candidates)
     print("Points faible contraste éliminés: ", cnt_removed_contrast)
     print("Points d'arêtes éliminés: ", cnt_removed_edge)
+    print("len keypoints: ", len(keypoints))
 
 
     # TODO: Important REVOIR: Je ne pense pas qu'il faut faire cela
@@ -133,10 +134,15 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
             if m >= .8 * max_val:
                 keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, bin_index, BIN_SIZE)))
 
+
+    print("len keypoints_m_and_theta: ", len(keypoints_m_and_theta))
+
     # Ajuster les coordonnées du point sur l'image d'origine selon la résolution de l'octave
     adjusted_keypoints = []
     for keypoint in keypoints_m_and_theta:
         adjusted_keypoints.append((keypoint[0]*(2**resolution_octave), keypoint[1]*(2**resolution_octave), keypoint[2], keypoint[3]))
+
+    print("len adjusted_keypoints: ", len(adjusted_keypoints))
 
     return np.array(adjusted_keypoints)
 

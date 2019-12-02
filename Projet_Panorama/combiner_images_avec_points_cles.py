@@ -1,5 +1,5 @@
 import numpy as np
-from homographie import calcul_matrice_H_avec_svd
+from homographie import calcul_matrice_H_avec_svd, calcul_matrice_H_avec_eig
 
 def combiner_images_avec_points_cles(keypoints_matched1, keypoints_matched2, img_color1, img_color2):
     H, _ = calcul_matrice_H_avec_svd(keypoints_matched1, keypoints_matched2)
@@ -8,6 +8,10 @@ def combiner_images_avec_points_cles(keypoints_matched1, keypoints_matched2, img
 
     shape_img2 = np.array([len(img_color2), len(img_color2[0]), 1])
     shape_pano_img = H_inv@shape_img2
+
+
+    print(H)
+    print(shape_pano_img)
 
     # Ajouter image de droite
     pano_img = np.zeros((int(shape_pano_img[0]), int(shape_pano_img[1]), 3), dtype=np.float32)
