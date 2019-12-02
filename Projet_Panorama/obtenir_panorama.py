@@ -99,6 +99,7 @@ def obtenir_panorama(img_color1, img_color2):
                         descriptors_image1=keypoints1,
                         descriptors_image2=keypoints2)
 
+    np.save("matrice_D.npy", distance_matrix)
 
     print("\nCalcul de l'index des k plus petites distances")
     # Obtenir les k points avec la plus petite distance
