@@ -45,6 +45,9 @@ def get_k_lowest(descriptors_distance_matrix, k):
                 # On ajoute nouveau point
                 k_lowest.append(candidate)
                 # On sort l'array
-                k_lowest.sort(reverse = True)
+                k_lowest.sort(reverse = True, key=getKey)
 
     return k_lowest
+
+def getKey(item):
+    return item[0]
