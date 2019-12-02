@@ -61,7 +61,9 @@ def obtenir_panorama(img_color1, img_color2):
     print("len keypoints1 ", len(keypoints1))
     print("len keypoints_descriptors1 ", len(keypoints_descriptors1))
 
-    np.save("points_cles_image_gauche.npy", keypoints_descriptors1)
+    np.save("points_cles_image_gauche.npy", keypoints1)
+    np.save("descripteurs_image_gauche.npy", keypoints_descriptors1)
+
 
     print("\nCalculs pour Image 2")
     # Obtenir pyramide de gaussienne pour Image 2
@@ -94,7 +96,9 @@ def obtenir_panorama(img_color1, img_color2):
     print("len keypoints_descriptors2 ", len(keypoints_descriptors2))
 
 
-    np.save("points_cles_image_droite.npy", keypoints_descriptors2)
+    np.save("points_cles_image_droite.npy", keypoints2)
+    np.save("descripteurs_image_droite.npy", keypoints_descriptors2)
+
 
     ##### 2. Trouver points clés de l'image 1 qui concordent avec ceux de l'image 2 #####
 
@@ -106,6 +110,7 @@ def obtenir_panorama(img_color1, img_color2):
     
     print("distance_matrix.shape", distance_matrix.shape)
 
+    np.save("matrice_D.npy", distance_matrix)
 
     print("\nCalcul de l'index des k plus petites distances")
     # Obtenir les k points avec la plus petite distance
