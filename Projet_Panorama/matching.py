@@ -53,6 +53,6 @@ def get_k_lowest(descriptors_distance_matrix, k):
                 k_lowest_set.add(candidate_coord)
 
             
-
+    print(k_lowest)
 
     return k_lowest

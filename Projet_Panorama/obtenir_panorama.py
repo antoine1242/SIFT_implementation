@@ -22,7 +22,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Initialisation des constantes
     S = 3
-    NB_OCTAVE = 2
+    NB_OCTAVE = 1
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
     NB_K_LOWEST_PTS = 10
