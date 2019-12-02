@@ -58,6 +58,7 @@ def obtenir_panorama(img_color1, img_color2):
         keypoints1.extend(keypoints_descriptors)    
 
     np.save("points_cles_image_gauche.npy", keypoints1)
+    np.save("descripteurs_image_gauche.npy", keypoints_descriptors)
 
     print("\nCalculs pour Image 2")
     # Obtenir pyramide de gaussienne pour Image 2
@@ -87,6 +88,8 @@ def obtenir_panorama(img_color1, img_color2):
         keypoints2.extend(keypoints_descriptors)
 
     np.save("points_cles_image_droite.npy", keypoints2)
+    np.save("descripteurs_image_droite.npy", keypoints_descriptors)
+
 
     ##### 2. Trouver points clés de l'image 1 qui concordent avec ceux de l'image 2 #####
 
