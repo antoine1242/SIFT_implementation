@@ -6,7 +6,8 @@ from afficher_img_avec_points_cles import afficher_img_avec_points_cles
 from combiner_images_avec_points_cles import combiner_images_avec_points_cles
 from hist_match import equalize_hist
 from skimage.io import imread
-
+from scipy.spatial import distance_matrix
+from matching import get_k_lowest
 from scipy import ndimage
 
 def rotate(image, angle, center = None, scale = 1.0):
@@ -21,6 +22,10 @@ def rotate(image, angle, center = None, scale = 1.0):
 
     return rotated
 
+print(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])))
+print(get_k_lowest(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])), 2))
+
+"""
 img_color1 = imread("./images/gauche.jpg")
 img_color2 = imread("./images/droite.jpg")
 
@@ -49,3 +54,4 @@ pano_img = combiner_images_avec_points_cles(
                 img_color2=img_color2_v2)
 
 afficher_img_avec_points_cles(pano_img, [], False)
+"""
