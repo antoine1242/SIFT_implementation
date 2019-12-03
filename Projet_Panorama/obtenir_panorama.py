@@ -55,6 +55,7 @@ def obtenir_panorama(img_color1, img_color2):
 
         # Obtenir les descripteurs
         keypoints_descriptors = description_points_cles(
+                                    initial_image=img1,
                                     keypoints=keypoints, 
                                     resolution_octave=resolution_octave, 
                                     gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
@@ -93,6 +94,7 @@ def obtenir_panorama(img_color1, img_color2):
 
         # Obtenir descripteurs pour points clés Image 2
         keypoints_descriptors = description_points_cles(
+                                    initial_image=img2,
                                     keypoints=keypoints,
                                     resolution_octave=resolution_octave, 
                                     gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
