@@ -1,9 +1,10 @@
 import numpy as np
-from gaussian_filter import gaussian_filter
 import cv2
-import os
+from gaussian_filter import gaussian_filter
+from scipy.ndimage.filters import convolve
+from gaussian_filter import gaussian_filter
 
-def description_points_cles(keypoints, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
+def description_points_cles(initial_image, keypoints, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Description des points cles")
 
     keypoints_descriptors = []
@@ -13,6 +14,11 @@ def description_points_cles(keypoints, resolution_octave, gaussian_filtered_imag
     region_length = 4
     window_length = region_length * nb_regions
     
+    # Dictionnaire d'images filtrées avec sigma donné:
+    # Key: sigma
+    # Value: image initiale convoluée avec filtre gaussien de valeur sigma
+    filtered_images_dict = {}
+
     # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
     circular_gaussian_window = gaussian_filter(window_length / 6)
 
@@ -35,6 +41,15 @@ def description_points_cles(keypoints, resolution_octave, gaussian_filtered_imag
 
         idx = gaussian_filtered_images_sigmas.index(sigma)
         L = gaussian_filtered_images[idx]
+
+        # if sigma in filtered_images_dict:
+        #     L = filtered_images_dict[sigma]
+        # else:
+        #     kernel = gaussian_filter(sigma)
+        #     result = convolve(initial_image, kernel)
+        #     filtered_images_dict[sigma] = result
+        #     L = result
+
         
         L = rotate(L, keypoint[3], (y_kp, x_kp))
 
