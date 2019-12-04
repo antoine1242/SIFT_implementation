@@ -1,5 +1,5 @@
-
 import numpy as np
+import matplotlib.pyplot as plt
 from difference_de_gaussiennes import difference_de_gaussiennes
 from description_points_cles import description_points_cles
 from detection_points_cles import detection_points_cles
@@ -120,7 +120,10 @@ def obtenir_panorama(img_color1, img_color2):
     
     print("distance_matrix.shape", distance_matrix.shape)
 
-    np.save("matrice_D.npy", distance_matrix)
+    # Affiche la matrice des distances
+    plt.imshow(distance_matrix)
+    plt.colorbar()
+    plt.show()  
 
     print("\nCalcul de l'index des k plus petites distances")
     # Obtenir les k points avec la plus petite distance
