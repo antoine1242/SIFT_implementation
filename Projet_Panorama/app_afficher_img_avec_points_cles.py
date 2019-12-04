@@ -10,11 +10,11 @@ from skimage.io import imread
 
 def run():
 
-    img_color1 = imread("./images/gauche.jpg")
+    img_color1 = imread("./images/droite.jpg")
     img1 = rgb2gray(img_color1)
 
     S = 3
-    NB_OCTAVE = 2
+    NB_OCTAVE = 3
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
     RESOLUTION_OCTAVE = 0
@@ -42,6 +42,6 @@ def run():
         keypoints_octaves.append(keypoints)
 
 
-    afficher_img_avec_points_cles(img_color1, keypoints_octaves, True)
+    afficher_img_avec_points_cles(img_color1, keypoints_octaves, True, "image_droite_avec_points_cles_et_theta")
 
 run()
