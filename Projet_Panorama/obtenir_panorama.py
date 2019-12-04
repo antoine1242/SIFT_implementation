@@ -22,7 +22,7 @@ def obtenir_panorama(img_color1, img_color2):
 
     # Initialisation des constantes
     S = 3
-    NB_OCTAVE = 2
+    NB_OCTAVE = 3
     SEUIL_CONTRASTE = 0.03
     R_COURBURE_PRINCIPALE = 10
     NB_K_LOWEST_PTS = 10
@@ -41,17 +41,20 @@ def obtenir_panorama(img_color1, img_color2):
     # Obtenir les points clés pour Image 1
     keypoints1 = []
     keypoints_descriptors1  = []
+    keypoints1_par_octave = []
+
     for resolution_octave in range(NB_OCTAVE):  
         keypoints = detection_points_cles(
-                        dog=dogs1[resolution_octave], 
-                        sigma=sigmas1[resolution_octave], 
-                        seuil_contraste=SEUIL_CONTRASTE, 
-                        r_courbure_principale=R_COURBURE_PRINCIPALE, 
-                        resolution_octave=resolution_octave, 
-                        gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
-                        gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[resolution_octave])
+                    dog=dogs1[resolution_octave], 
+                    sigma=sigmas1[resolution_octave], 
+                    seuil_contraste=SEUIL_CONTRASTE, 
+                    r_courbure_principale=R_COURBURE_PRINCIPALE, 
+                    resolution_octave=resolution_octave, 
+                    gaussian_filtered_images=gaussian_filtered_images1[resolution_octave], 
+                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas1[resolution_octave])
 
         keypoints1.extend(keypoints)
+        keypoints1_par_octave.append(len(keypoints))
 
         # Obtenir les descripteurs
         keypoints_descriptors = description_points_cles(
@@ -63,8 +66,12 @@ def obtenir_panorama(img_color1, img_color2):
 
         keypoints_descriptors1.extend(keypoints_descriptors)
 
-    print("len keypoints1 ", len(keypoints1))
+    print("Nombre de points cles dans l'image 1:", len(keypoints1))
     print("len keypoints_descriptors1 ", len(keypoints_descriptors1))
+
+    plot_graph(keypoints1_par_octave, 1)
+
+    print("Points retires a cause du contraste dans l'image 1:")
 
     np.save("points_cles_image_gauche.npy", keypoints1)
     np.save("descripteurs_image_gauche.npy", keypoints_descriptors1)
@@ -80,17 +87,20 @@ def obtenir_panorama(img_color1, img_color2):
     # Obtenir points clés pour Image 2
     keypoints2 = []
     keypoints_descriptors2  = []
+    keypoints2_par_octave = []
+
     for resolution_octave in range(NB_OCTAVE):
         keypoints = detection_points_cles(
-                        dog=dogs2[resolution_octave],
-                        sigma=sigmas2[resolution_octave],
-                        seuil_contraste=SEUIL_CONTRASTE,
-                        r_courbure_principale=R_COURBURE_PRINCIPALE,
-                        resolution_octave=resolution_octave,
-                        gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
-                        gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
+                    dog=dogs2[resolution_octave],
+                    sigma=sigmas2[resolution_octave],
+                    seuil_contraste=SEUIL_CONTRASTE,
+                    r_courbure_principale=R_COURBURE_PRINCIPALE,
+                    resolution_octave=resolution_octave,
+                    gaussian_filtered_images=gaussian_filtered_images2[resolution_octave],
+                    gaussian_filtered_images_sigmas=gaussian_filtered_images_sigmas2[resolution_octave])
 
         keypoints2.extend(keypoints)
+        keypoints2_par_octave.append(len(keypoints))
 
         # Obtenir descripteurs pour points clés Image 2
         keypoints_descriptors = description_points_cles(
@@ -102,9 +112,10 @@ def obtenir_panorama(img_color1, img_color2):
         
         keypoints_descriptors2.extend(keypoints_descriptors)
 
-    print("len keypoints2 ", len(keypoints2))
+    print("Nombre de points cles dans l'image 2:", len(keypoints2))
     print("len keypoints_descriptors2 ", len(keypoints_descriptors2))
 
+    plot_graph(keypoints2_par_octave, 2)
 
     np.save("points_cles_image_droite.npy", keypoints2)
     np.save("descripteurs_image_droite.npy", keypoints_descriptors2)
@@ -170,3 +181,20 @@ def obtenir_panorama(img_color1, img_color2):
     afficher_img_avec_points_cles(pano_img, [], False)
 
     return pano_img
+
+def plot_graph(keypoint_lens, num_image):
+    x = []
+    y = keypoint_lens
+    
+    # Avoir les points au bon octave
+    for i in range(1, len(keypoint_lens) + 1):
+        x.append(i)
+
+    plt.plot(x, y, linestyle='None', marker='o', markerfacecolor='blue', markersize=5)
+
+    plt.xlabel("Numero de l'octave")
+    plt.ylabel("Nombre de points cles detectes")
+
+    plt.title("Evolution du nombre de points-cles pour l'image " + str(num_image))
+
+    plt.show()

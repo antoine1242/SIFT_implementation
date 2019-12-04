@@ -7,32 +7,32 @@ from gaussian_filter import gaussian_filter
 def description_points_cles(initial_image, keypoints, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Description des points cles")
 
+    # Dictionnaire d'images filtrées avec sigma donné:
+    # Key: sigma
+    # Value: image initiale convoluée avec filtre gaussien de valeur sigma
     keypoints_descriptors = []
-    
+    filtered_images_dict = {}
     for keypoint in keypoints:
-        descriptor = calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas)
+        descriptor = calculate_descriptors(initial_image, filtered_images_dict, keypoint, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas)
         
         if len(descriptor) > 0:
             keypoints_descriptors.append(descriptor)
 
     return np.array(keypoints_descriptors)
 
-def calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
+def calculate_descriptors(initial_image, filtered_images_dict, keypoint, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     nb_bins = 8
     nb_regions = 4
     region_length = 4
     window_length = region_length * nb_regions
     
-    # Dictionnaire d'images filtrées avec sigma donné:
-    # Key: sigma
-    # Value: image initiale convoluée avec filtre gaussien de valeur sigma
-    filtered_images_dict = {}
 
     # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
     circular_gaussian_window = gaussian_filter(window_length / 6)
 
-    x_kp = int(round(keypoint[0]/(2**resolution_octave)))
-    y_kp = int(round(keypoint[1]/(2**resolution_octave)))
+    # TODO ajuster position aussi lorsqu'on va mettre bonne version de L
+    x_kp = int(round(keypoint[0]/(2**resolution_octave))) #keypoint[0] # int(round(keypoint[0]/(2**resolution_octave)))
+    y_kp = int(round(keypoint[1]/(2**resolution_octave))) #keypoint[1] # int(round(keypoint[1]/(2**resolution_octave)))
     sigma = keypoint[2]
     
     # On initialise le descripteur avec les coordonnées x,y du point clé
@@ -42,10 +42,6 @@ def calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images,
 
 
     # TODO : Revoir quelle image on doit prendre 
-    # max_sigma_octave_1 = gaussian_filtered_images_sigmas[len(gaussian_filtered_images_sigmas) - 1]
-    # if sigma > max_sigma_octave_1:
-    #     sigma = max_sigma_octave_1
-
     idx = gaussian_filtered_images_sigmas.index(sigma)
     L = gaussian_filtered_images[idx]
 
@@ -63,7 +59,7 @@ def calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images,
     # Parcours de la zone 16x16 autour du point clé pour calculer le gradient de chaque point
     range_zone = int(window_length / 2)
 
-    # Initialisation de la matrice de grandients
+    # Initialisation de la matrice de gradients
     # Note: Besoin d'une liste pcq numpy array veut pas remplacer les ints par des tuples
     gradients_matrix = x = [[0 for i in range(window_length)] for j in range(window_length)]
     
@@ -81,12 +77,12 @@ def calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images,
                 return []
 
             # Calcul du gradient (norme + orientation)
-            dx = L[min(L.shape[0]-1, x+1)][y] - L[max(x-1, 0)][y]
-            dy = L[x][min(L.shape[1]-1, y+1)] - L[x][max(y-1, 0)]
+            dx = 0.5 * (L[min(L.shape[0]-1, x+1)][y] - L[max(x-1, 0)][y])
+            dy = 0.5 * (L[x][min(L.shape[1]-1, y+1)] - L[x][max(y-1, 0)])
             m = np.sqrt(dx**2 + dy**2)
             theta = (np.arctan2(dy, dx)) * 180/np.pi
             
-            # Ajouter gradient à la matrice de grandients
+            # Ajouter gradient à la matrice de gradients
             gradients_matrix[dx_zone + range_zone][dy_zone + range_zone] = (m, theta)
 
     histograms = []
@@ -103,19 +99,7 @@ def calculate_descriptors(keypoint, resolution_octave, gaussian_filtered_images,
 
                     mag = gradients_matrix[k][m][0]
                     theta = gradients_matrix[k][m][1]
-
-                    # TODO circular_gaussian_window avec dx_zone ... dy_zone .. ? (Vérifier mes ajustements ci-dessous)
-                    # avant : weight = circular_gaussian_window[dx_zone + range_zone][dy_zone + range_zone] * mag
-                    # maintenant: 
-
-                    # On pondère le gradient avec une gaussienne centrée sur le point clé
-                    x_pos_in_window = k
-                    y_pos_in_window = m
-
-                    x_pos_in_gaussian_window = int((len(circular_gaussian_window) * x_pos_in_window) // window_length)
-                    y_pos_in_gaussian_window = int((len(circular_gaussian_window) * y_pos_in_window) // window_length)
-
-                    weight = circular_gaussian_window[x_pos_in_gaussian_window][y_pos_in_gaussian_window] * mag
+                    weight = circular_gaussian_window[k][m] * mag
 
                     bin_number = int(np.floor(theta) // (360 // nb_bins))
                     hist[bin_number] += weight
