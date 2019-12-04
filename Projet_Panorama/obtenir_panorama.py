@@ -170,7 +170,7 @@ def obtenir_panorama(img_color1, img_color2):
                     keypoints_matched1=keypoints_matched1, 
                     keypoints_matched2=keypoints_matched2, 
                     img_color1=img_color1, 
-                    img_color2=img_color2_v2)
+                    img_color2=img_color2)
 
     afficher_img_avec_points_cles(pano_img, [], False)
 
