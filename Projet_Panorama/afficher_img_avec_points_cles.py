@@ -15,7 +15,11 @@ def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle):
 
     for idx, keypoints in enumerate(keypoints_octaves):
         # Now, loop through coord arrays, and create a circle at each x,y pair
-        color_tag = plt.cm.RdYlBu(idx/(len(keypoints_octaves) - 1))
+        if len(keypoints_octaves) > 1:
+            tag = idx/(len(keypoints_octaves) - 1)
+        else:
+            tag = idx
+        color_tag = plt.cm.RdYlBu(tag)
         add_keypoints(keypoints, ax, color_tag, has_angle)
 
     # Show the image
