@@ -23,7 +23,7 @@ def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle, name_file="
         add_keypoints(keypoints, ax, color_tag, has_angle)
 
     # Show the image
-    if name_file is not None:
+    if name_file != "":
         plt.savefig("./images_rapport/" + str(name_file) + ".png")
     plt.show()
 
