@@ -4,14 +4,12 @@ from matplotlib.patches import Circle, Arrow
 import math 
 
 def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle, name_file=""):
-
-
     # Create a figure. Equal aspect so circles look circular
     fig,ax = plt.subplots(1)
     ax.set_aspect('equal')
 
     # Show the image
-    ax.imshow(img)#, ), cmap=plt.cm.gray
+    ax.imshow(img)  # cmap=plt.cm.gray
 
     for idx, keypoints in enumerate(keypoints_octaves):
         # Now, loop through coord arrays, and create a circle at each x,y pair
