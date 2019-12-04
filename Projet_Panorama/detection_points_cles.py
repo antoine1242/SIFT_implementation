@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from gaussian_filter import gaussian_filter
 from scipy.ndimage.filters import convolve
-# TODO: resolution_octave ajuster position keypoint dans l'image selon la résolution de l'image à l'octave donnée.
 
 def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, resolution_octave, gaussian_filtered_images, gaussian_filtered_images_sigmas):
     print("Detection des points cles - Octave " + str(resolution_octave + 1))
@@ -28,7 +27,6 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                           [1., 0., -1.],
                           [0., 0., 0.],])
 
-    #  dxx = (current[x+1][y] - 2*current[x][y] + current[x-1][y]) 
     gxx_kernel = np.array([[0., 1., 0.],
                            [0., -2., 0.],
                            [0., 1., 0.],])
@@ -37,7 +35,6 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                            [1., -2., 1.],
                            [0., 0., 0.],])
 
-    # ((current[x+1][y+1] - current[x-1][y+1]) - (current[x+1][y-1] - current[x-1][y-1])) /4.
     gxy_kernel = np.array([[1., 0., -1.],
                            [0., 0., 0.],
                            [-1., 0., 1.],])
@@ -217,36 +214,6 @@ def find_angle(hist, max_bin, bin_size):
         a = 1e-6
 
     return -b / (2 * a)
-
-def dog_derivative(stack_of_dog, candidate_keypoint):
-    x = candidate_keypoint[0]
-    y = candidate_keypoint[1]
-    s = 1 
-
-    # 1. Obtenir évaluation de D au point candidat x (D(x))
-    dx = (stack_of_dog[s][x+1][y] - stack_of_dog[s][x-1][y]) / 2.
-    dy = (stack_of_dog[s][x][y+1] - stack_of_dog[s][x][y-1]) / 2.
-    ds = (stack_of_dog[s+1][x][y] - stack_of_dog[s-1][x][y]) / 2.
-
-    d_dx = np.array([dx, dy, ds])
-
-    X = np.array(candidate_keypoint)
-
-    D_of_x = stack_of_dog[s][x][y] + 0.5 * (d_dx.dot(X))
-
-
-    # 2. Obtenir Ratio pour la courbature
-    dxx = (stack_of_dog[s][x+1][y] - 2*stack_of_dog[s][x][y] + stack_of_dog[s][x-1][y]) 
-    dyy = (stack_of_dog[s][x][y+1] - 2*stack_of_dog[s][x][y] + stack_of_dog[s][x][y-1]) 
-    dxy = ((stack_of_dog[s][x+1][y+1] - stack_of_dog[s][x-1][y+1]) - (stack_of_dog[s][x+1][y-1] - stack_of_dog[s][x-1][y-1])) /4.
-
-    traceH = dxx + dyy
-    detH = dxx*dyy - dxy**2
-
-    ratio = traceH**2 / detH 
-
-    return abs(D_of_x), detH, ratio
-
 
 # Permet de détecter si le point à la position x, y dans l'image est un extremum.
 def is_extremum(previous, current, next_, x, y):

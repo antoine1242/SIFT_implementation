@@ -1,10 +1,8 @@
 import matplotlib.pyplot as plt
 from afficher_img_avec_points_cles import add_keypoints
-
 from afficher_img_avec_points_cles import afficher_img_avec_points_cles
 
 def afficher_images_avec_point_cles_matched(img_color1, img_color2, keypoints_matched1, keypoints_matched2):
-
     fig, ax = plt.subplots(1, 2)
 
     ax[0].imshow(img_color1)

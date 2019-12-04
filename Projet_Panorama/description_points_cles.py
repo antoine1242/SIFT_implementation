@@ -26,24 +26,31 @@ def calculate_descriptors(initial_image, filtered_images_dict, keypoint, resolut
     region_length = 4
     window_length = region_length * nb_regions
     
-
     # gaussian_filter multiplie sigma par 3 donc on doit diviser par 6 ici pour avoir 0.5 sigma
     circular_gaussian_window = gaussian_filter(window_length / 6)
 
-    # TODO ajuster position aussi lorsqu'on va mettre bonne version de L
-    x_kp = int(round(keypoint[0]/(2**resolution_octave))) #keypoint[0] # int(round(keypoint[0]/(2**resolution_octave)))
-    y_kp = int(round(keypoint[1]/(2**resolution_octave))) #keypoint[1] # int(round(keypoint[1]/(2**resolution_octave)))
-    sigma = keypoint[2]
-    
     # On initialise le descripteur avec les coordonnées x,y du point clé
     keypoint_descriptor = [keypoint[0], keypoint[1]]
 
-    # Sélection de l'image correspondant au sigma du point clé
+    x_kp = int(round(keypoint[0]/(2**resolution_octave))) # keypoint[0] 
+    y_kp = int(round(keypoint[1]/(2**resolution_octave))) # keypoint[1] 
+    sigma = keypoint[2]
+
+    # Commentaire à propos de notre sélection de l'image correspondant 
+    # au sigma du point-clé:
+
+    # Initialement nous ne savions pas quelle image lissée sélectionner.
+    # Nous avions opté pour l'image lissée de taille réduite correspondant
+    # au sigma du point-clé, d'où la correction de la position du point-clé
+    # "int(round(keypoint[0]/(2**resolution_octave)))" ci-dessus.
+
+    # Après avoir vérifié avec Clément, ce dernier nous a affirmé que 
+    # nous devions prendre l'image de taille originale lissée au sigma
+    # du point-clé, ce qui était en effet plus logique. 
 
 
-    # TODO : Revoir quelle image on doit prendre 
-    idx = gaussian_filtered_images_sigmas.index(sigma)
-    L = gaussian_filtered_images[idx]
+    # Code pour sélectionner l'image lissée de taille originale
+    # correspondant au sigma donné:
 
     # if sigma in filtered_images_dict:
     #     L = filtered_images_dict[sigma]
@@ -53,7 +60,21 @@ def calculate_descriptors(initial_image, filtered_images_dict, keypoint, resolut
     #     filtered_images_dict[sigma] = result
     #     L = result
 
-    
+    # Une fois ce code ajouté au reste de notre implémentation nous 
+    # avons pu constater d'étranges résultats par rapport aux couples 
+    # de points-clés match. 
+    # Nous avons donc investigué la situation afin de trouver l'origine
+    # de ce changement de comportement lors du matching des points-clés.
+    # Après une longue investigation nous n'avons su mettre la main sur
+    # le problème.
+    # Nous avons finalement décidé de revenir à notre implémentation 
+    # initiale (voir les deux lignes ci-dessous) malgré le fait que 
+    # nous sommes conscients que cette implémentation n'est pas valide. 
+
+    idx = gaussian_filtered_images_sigmas.index(sigma)
+    L = gaussian_filtered_images[idx]
+
+    # Rotation de l'image L avec l'angle du point-clé correspondant    
     L = rotate(L, keypoint[3], (y_kp, x_kp))
 
     # Parcours de la zone 16x16 autour du point clé pour calculer le gradient de chaque point
