@@ -28,7 +28,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                           [1., 0., -1.],
                           [0., 0., 0.],])
 
-    #  dxx = (current[s][x+1][y] - 2*current[s][x][y] + current[s][x-1][y]) 
+    #  dxx = (current[x+1][y] - 2*current[x][y] + current[x-1][y]) 
     gxx_kernel = np.array([[0., 1., 0.],
                            [0., -2., 0.],
                            [0., 1., 0.],])
@@ -37,7 +37,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                            [1., -2., 1.],
                            [0., 0., 0.],])
 
-    # ((current[s][x+1][y+1] - current[s][x-1][y+1]) - (current[s][x+1][y-1] - current[s][x-1][y-1])) /4.
+    # ((current[x+1][y+1] - current[x-1][y+1]) - (current[x+1][y-1] - current[x-1][y-1])) /4.
     gxy_kernel = np.array([[1., 0., -1.],
                            [0., 0., 0.],
                            [-1., 0., 1.],])
