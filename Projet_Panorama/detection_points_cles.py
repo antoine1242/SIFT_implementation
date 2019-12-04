@@ -12,10 +12,9 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
     BIN_SIZE = 360 // NB_BINS
 
     # Initialisation des compteurs
-    cnt_candidates_curr = 0
-    cnt_candidates_octave = []
     cnt_removed_extrema = 0
     cnt_removed_edge = 0
+    cnt_removed_constrast = 0
 
     ##### 1. Trouver points clés #####
 
@@ -39,9 +38,9 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                            [0., 0., 0.],])
 
     # ((current[s][x+1][y+1] - current[s][x-1][y+1]) - (current[s][x+1][y-1] - current[s][x-1][y-1])) /4.
-    gxy_kernel = np.array([[-1., 0., 1.],
+    gxy_kernel = np.array([[1., 0., -1.],
                            [0., 0., 0.],
-                           [1., 0., -1.],])
+                           [-1., 0., 1.],])
 
 
     # Parcourir les différences de gaussiennes (DoG) exceptés la première et la dernière
@@ -63,10 +62,9 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
 
         # Obtenir points-clés ca
         candidate_keypoints = []
-        count_ = 0
+
         for x in range(len(current)):
             for y in range(len(current[0])):
-                count_ += 1
                 candidate_keypoint = (x, y, sigma_val)
 
                 # Calculs pour D_of_x
@@ -81,9 +79,7 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                 D_of_x = current[x][y] + 0.5 * (d_dx.dot(X))
 
                 # Si D_of_x plus grand que seuil de contraste on considère le point
-                if abs(D_of_x) >= seuil_contraste:
-                    cnt_candidates_curr += 1
-                                        
+                if abs(D_of_x) >= seuil_contraste:                     
                     # Calculs pour detH & ratio
                     dxx = dxx_matrix[x][y]
                     dyy = dyy_matrix[x][y]
@@ -98,9 +94,10 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                         candidate_keypoints.append(candidate_keypoint)
                     else:
                         cnt_removed_edge += 1
+                else:
+                    cnt_removed_constrast += 1
 
-        print("count_", count_)
-        print("cnt_candidates_curr", cnt_candidates_curr)
+        cnt_removed_extrema = 0
 
         for candidate_keypoint in candidate_keypoints:
             x = candidate_keypoint[0]
@@ -114,20 +111,13 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
                 keypoints.append(candidate_keypoint)
             else: 
                 cnt_removed_extrema += 1
-        
 
-        cnt_candidates_octave.append(cnt_candidates_curr)
-        cnt_candidates_curr = 0
-
-    cnt_candidates = sum(cnt_candidates_octave)
-
-    print("Points faible contraste détectés: ", cnt_candidates)
-    print("Points d'arêtes éliminés: ", cnt_removed_edge)
-    print("Points non extremas éliminés: ", cnt_removed_extrema)
-    print("len keypoints: ", len(keypoints))
+    print("Total de points faible contraste elimines: ", cnt_removed_constrast)
+    print("Total de points d'arêtes elimines: ", cnt_removed_edge)
+    print("Total de points non extremas elimines: ", cnt_removed_extrema)
+    print("Total de points-cles trouves: ", len(keypoints))
 
     keypoints_filtered = keypoints
-
 
     ##### 2. Trouver orientation des points clés #####
 
@@ -192,15 +182,12 @@ def detection_points_cles(dog, sigma, seuil_contraste, r_courbure_principale, re
             if m >= .8 * max_val:
                 keypoints_m_and_theta.append((keypoint[0], keypoint[1], keypoint[2], find_angle(hist, bin_index, BIN_SIZE)))
 
-
-    print("len keypoints_m_and_theta: ", len(keypoints_m_and_theta))
+    print("Total de points cles apres l'ajout de l'angle:", len(keypoints_m_and_theta))
 
     # Ajuster les coordonnées du point sur l'image d'origine selon la résolution de l'octave
     adjusted_keypoints = []
     for keypoint in keypoints_m_and_theta:
         adjusted_keypoints.append((keypoint[0]*(2**resolution_octave), keypoint[1]*(2**resolution_octave), keypoint[2], keypoint[3]))
-
-    print("len adjusted_keypoints: ", len(adjusted_keypoints))
 
     return np.array(adjusted_keypoints)
 
@@ -230,8 +217,6 @@ def find_angle(hist, max_bin, bin_size):
         a = 1e-6
 
     return -b / (2 * a)
-
-
 
 def dog_derivative(stack_of_dog, candidate_keypoint):
     x = candidate_keypoint[0]
