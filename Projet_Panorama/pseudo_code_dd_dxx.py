@@ -54,3 +54,22 @@
     ratio = traceH**2 / detH 
 
     return abs(D_of_x), detH, ratio
+
+
+
+
+
+# # Élimination de certains point clés candidats
+# for candidate_keypoint in candidate_keypoints:
+#     stack_of_dog = np.asarray([previous, current, next_])
+#     # Obtenir informations nécessaires à partir des Différences de Gaussiennes
+#     D_of_x, detH, ratio = dog_derivative(stack_of_dog, candidate_keypoint) 
+#     # Élimination des points-clés de faible contraste avec D(x)
+#     if D_of_x < seuil_contraste:
+#         cnt_removed_extrema += 1
+#     # Élimination des points situés sur les arêtes 
+#     elif detH < 0 or ratio > (r_courbure_principale + 1)**2 / r_courbure_principale:
+#         cnt_removed_edge += 1
+#     # Si le point clé candidat respecte l'ensemble des restrictions on l'ajoute aux points clés 
+#     else:
+#         keypoints.append(candidate_keypoint)
