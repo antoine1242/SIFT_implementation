@@ -22,10 +22,10 @@ def rotate(image, angle, center = None, scale = 1.0):
 
     return rotated
 
-print(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])))
-print(get_k_lowest(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])), 2))
+#print(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])))
+#print(get_k_lowest(distance_matrix(np.asarray([[1],[2],[15]]), np.asarray([[3],[4]])), 2))
 
-"""
+
 img_color1 = imread("./images/gauche.jpg")
 img_color2 = imread("./images/droite.jpg")
 
@@ -35,13 +35,16 @@ img_color2 = imread("./images/droite.jpg")
 keypoints_matched1 = [(169.0, 753.0), (516.0, 753.0), (444.0, 766.0), (503.0, 749.0), (494.0, 619.0), (229.0, 638.0), (277.0, 810.0), (355.0, 818.0), (398.0, 924.0), (109.0, 988.0), (177.0, 749.0), (363.0, 624.0), (440.0, 645.0)]
 keypoints_matched2 = [(168.0, 148.0), (520.0, 151.0), (447.0, 164.0), (507.0, 147.0), (499.0, 15.0), (230.0, 32.0), (277.0, 207.0), (356.0, 216.0), (399.0, 323.0), (105.0, 386.0), (176.0, 144.0), (366.0, 19.0), (444.0, 41.0)]
 
+#keypoints_matched1 = [(255.0, 762.0), (277.0, 810.0), (353.0, 921.0), (503.0, 749.0), (510.0, 645.0), (59.0, 959.0)]
+#keypoints_matched2 = [(255.0, 158.0), (277.0, 207.0), (353.0, 320.0), (507.0, 147.0), (515.0, 42.0), (54.0, 356.0)]
+
 #afficher_img_avec_points_cles(img_color1, keypoints_matched1, False)
 #afficher_img_avec_points_cles(img_color2, keypoints_matched2, False)
 
 
 #rotation angle in degree
-rotated = rotate(img_color1, 45, (300, 300))
-afficher_img_avec_points_cles(rotated, [], False)
+#rotated = rotate(img_color1, 45, (300, 300))
+#afficher_img_avec_points_cles(rotated, [], False)
 
 
 img_color2_v2 = equalize_hist(img_color2, img_color1)
@@ -54,4 +57,4 @@ pano_img = combiner_images_avec_points_cles(
                 img_color2=img_color2_v2)
 
 afficher_img_avec_points_cles(pano_img, [], False)
-"""
+
