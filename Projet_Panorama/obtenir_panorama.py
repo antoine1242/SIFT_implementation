@@ -19,7 +19,6 @@ def obtenir_panorama(img_color1, img_color2):
     img1 = rgb2gray(img_color1)
     img2 = rgb2gray(img_color2)
 
-
     # Initialisation des constantes
     S = 3
     NB_OCTAVE = 3
@@ -130,7 +129,7 @@ def obtenir_panorama(img_color1, img_color2):
                         descriptors_image2=keypoints_descriptors2)
     
     print("distance_matrix.shape", distance_matrix.shape)
-    np.save("matrice_D.npy", keypoints2)
+    np.save("matrice_D.npy", distance_matrix)
 
     # Affiche la matrice des distances
     plt.imshow(distance_matrix)
