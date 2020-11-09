@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Circle, Arrow
 import math 
 
-def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle):
+def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle, name_file=""):
 
 
     # Create a figure. Equal aspect so circles look circular
@@ -11,14 +11,20 @@ def afficher_img_avec_points_cles(img, keypoints_octaves, has_angle):
     ax.set_aspect('equal')
 
     # Show the image
-    ax.imshow(img)#, cmap=plt.cm.gray)
+    ax.imshow(img)#, ), cmap=plt.cm.gray
 
     for idx, keypoints in enumerate(keypoints_octaves):
         # Now, loop through coord arrays, and create a circle at each x,y pair
-        color_tag = plt.cm.RdYlBu(idx/(len(keypoints_octaves) - 1))
+        if len(keypoints_octaves) > 1:
+            tag = idx/(len(keypoints_octaves) - 1)
+        else:
+            tag = idx
+        color_tag = plt.cm.RdYlBu(tag)
         add_keypoints(keypoints, ax, color_tag, has_angle)
 
     # Show the image
+    if name_file is not None:
+        plt.savefig("./images_rapport/" + str(name_file) + ".png")
     plt.show()
 
 
